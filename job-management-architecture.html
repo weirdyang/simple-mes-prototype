@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Management System - Architecture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #333;
+    }
+    
+    .diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .layer {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fafafa;
+    }
+    
+    .layer-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .boxes {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .box {
+      flex: 1;
+      min-width: 250px;
+      border: 2px solid #333;
+      border-radius: 6px;
+      padding: 15px;
+      background: white;
+    }
+    
+    .box-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
+    }
+    
+    .box-content {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #555;
+    }
+    
+    .field {
+      margin: 5px 0;
+      padding-left: 10px;
+    }
+    
+    .field::before {
+      content: "•";
+      margin-right: 5px;
+      color: #2563eb;
+    }
+    
+    .nested {
+      margin-left: 20px;
+      padding: 8px;
+      background: #f0f9ff;
+      border-left: 3px solid #2563eb;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    
+    .arrow {
+      text-align: center;
+      font-size: 24px;
+      color: #2563eb;
+      margin: -10px 0;
+    }
+    
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .flow-box {
+      background: #dbeafe;
+      border: 2px solid #2563eb;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: center;
+    }
+    
+    .flow-number {
+      background: #2563eb;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .example {
+      background: #fef3c7;
+      border: 2px dashed #f59e0b;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .example-title {
+      font-weight: bold;
+      color: #f59e0b;
+      margin-bottom: 8px;
+    }
+    
+    code {
+      background: #1f2937;
+      color: #10b981;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Job Management System - Architecture</h1>
+    
+    <div class="diagram">
+      <!-- Layer 1: Core Models -->
+      <div class="layer">
+        <div class="layer-title">Layer 1: Core Data Models</div>
+        <div class="boxes">
+          <div class="box">
+            <div class="box-title">JOB</div>
+            <div class="box-content">
+              <div class="field">jobName: string</div>
+              <div class="field">orderNo: string</div>
+              <div class="field">dueDate: string</div>
+              <div class="field">status: string</div>
+              <div class="field">assignedTo: string</div>
+              <div class="field">notes: string</div>
+              <div class="field">steps: Step[]</div>
+              <div class="field">requirements: Requirement[]</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">STEP</div>
+            <div class="box-content">
+              <div class="field">id: string</div>
+              <div class="field">name: string</div>
+              <div class="field">status: string</div>
+              <div class="field">assignedTo: string</div>
+              <div class="field">dependencies: stepId[]</div>
+              <div class="field">qaChecklistTemplateId: string</div>
+              <div class="field">qaChecklistData: object</div>
+              <div class="field">materials: Material[]</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">MATERIAL</div>
+            <div class="box-content">
+              <div class="field">id: string</div>
+              <div class="field">name: string</div>
+              <div class="field">quantity: number</div>
+              <div class="field">unit: string</div>
+              <div class="field">status: string</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Layer 2: Dynamic Form System -->
+      <div class="layer">
+        <div class="layer-title">Layer 2: Dynamic QA Checklist System</div>
+        <div class="boxes">
+          <div class="box">
+            <div class="box-title">QA TEMPLATE</div>
+            <div class="box-content">
+              <div class="field">templateId: string</div>
+              <div class="field">templateName: string</div>
+              <div class="field">fields: FieldDefinition[]</div>
+              
+              <div class="nested">
+                <strong>FieldDefinition:</strong><br>
+                • id: string<br>
+                • type: "text" | "number" | "checkbox" | "select" | "date"<br>
+                • label: string<br>
+                • required: boolean<br>
+                • validation: object<br>
+                • options: string[] (for select)
+              </div>
+            </div>
+            
+            <div class="example">
+              <div class="example-title">Example Template JSON:</div>
+              {<br>
+              &nbsp;&nbsp;"templateId": "welding_qa",<br>
+              &nbsp;&nbsp;"templateName": "Welding QA",<br>
+              &nbsp;&nbsp;"fields": [<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "temp",<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "number",<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "Temperature (°C)",<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"required": true,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"min": 150, "max": 300<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+              &nbsp;&nbsp;]<br>
+              }
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">FORM RENDERER</div>
+            <div class="box-content">
+              <div class="field">Reads QA Template JSON</div>
+              <div class="field">Dynamically generates HTML form</div>
+              <div class="field">Applies validation rules</div>
+              <div class="field">Renders appropriate input types</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">VALIDATOR</div>
+            <div class="box-content">
+              <div class="field">Validates user input</div>
+              <div class="field">Checks required fields</div>
+              <div class="field">Enforces min/max ranges</div>
+              <div class="field">Validates data types</div>
+              <div class="field">Returns error messages</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Layer 3: User Flow -->
+      <div class="layer">
+        <div class="layer-title">Layer 3: User Workflow</div>
+        
+        <div class="flow">
+          <div class="flow-box">
+            <div class="flow-number">1</div>
+            <strong>Create QA Template</strong><br>
+            <small>Admin defines JSON schema for checklist</small>
+          </div>
+          
+          <div class="flow-box">
+            <div class="flow-number">2</div>
+            <strong>Create Job</strong><br>
+            <small>Add job details, steps, materials</small>
+          </div>
+          
+          <div class="flow-box">
+            <div class="flow-number">3</div>
+            <strong>Assign QA Template to Step</strong><br>
+            <small>Link template to specific step</small>
+          </div>
+          
+          <div class="flow-box">
+            <div class="flow-number">4</div>
+            <strong>Execute Step</strong><br>
+            <small>Worker opens step, sees dynamic form</small>
+          </div>
+          
+          <div class="flow-box">
+            <div class="flow-number">5</div>
+            <strong>Fill QA Checklist</strong><br>
+            <small>Enter data, system validates</small>
+          </div>
+          
+          <div class="flow-box">
+            <div class="flow-number">6</div>
+            <strong>Submit & Save</strong><br>
+            <small>Data stored with step, marked complete</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Layer 4: Storage -->
+      <div class="layer">
+        <div class="layer-title">Layer 4: Data Storage (Prototype)</div>
+        <div class="boxes">
+          <div class="box">
+            <div class="box-title">LOCALSTORAGE</div>
+            <div class="box-content">
+              <div class="field"><code>jobs</code> - Array of Job objects</div>
+              <div class="field"><code>qaTemplates</code> - Array of QA Templates</div>
+              <div class="field"><code>users</code> - Array of users/teams</div>
+              <div class="field"><code>materials</code> - Material catalog</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">FUNCTIONS</div>
+            <div class="box-content">
+              <div class="field">saveJob(job)</div>
+              <div class="field">getJob(jobId)</div>
+              <div class="field">updateStep(jobId, stepId, data)</div>
+              <div class="field">saveQATemplate(template)</div>
+              <div class="field">validateQAData(templateId, data)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <!-- Layer 5: UI Components -->
+      <div class="layer">
+        <div class="layer-title">Layer 5: UI Components (Vanilla JS)</div>
+        <div class="boxes">
+          <div class="box">
+            <div class="box-title">JOB DASHBOARD</div>
+            <div class="box-content">
+              <div class="field">List all jobs</div>
+              <div class="field">Filter by status</div>
+              <div class="field">Search by order no.</div>
+              <div class="field">Create new job button</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">JOB DETAIL VIEW</div>
+            <div class="box-content">
+              <div class="field">Job info header</div>
+              <div class="field">Steps list (with status)</div>
+              <div class="field">Dependency visualization</div>
+              <div class="field">Materials checklist</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">STEP EXECUTION VIEW</div>
+            <div class="box-content">
+              <div class="field">Step details</div>
+              <div class="field">Dynamic QA form (rendered)</div>
+              <div class="field">Material usage tracking</div>
+              <div class="field">Status update controls</div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="box-title">QA TEMPLATE BUILDER</div>
+            <div class="box-content">
+              <div class="field">Visual form designer</div>
+              <div class="field">Add/remove fields</div>
+              <div class="field">Set validation rules</div>
+              <div class="field">Preview form</div>
+              <div class="field">Export JSON</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

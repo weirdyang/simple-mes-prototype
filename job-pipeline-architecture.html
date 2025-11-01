@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Management Pipeline System - Complete Architecture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+      font-size: 14px;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #1e293b;
+      font-size: 28px;
+    }
+    
+    .section {
+      background: white;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 25px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    
+    .section-content {
+      padding: 25px;
+    }
+    
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .schema-box {
+      border: 3px solid #334155;
+      border-radius: 8px;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+    
+    .schema-title {
+      background: #334155;
+      color: white;
+      padding: 12px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .schema-body {
+      padding: 15px;
+    }
+    
+    .field {
+      margin: 8px 0;
+      padding: 8px 10px;
+      background: white;
+      border-left: 4px solid #3b82f6;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+    
+    .field-name {
+      color: #0ea5e9;
+      font-weight: bold;
+    }
+    
+    .field-type {
+      color: #8b5cf6;
+      font-style: italic;
+    }
+    
+    .field-desc {
+      color: #64748b;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+    
+    .nested {
+      margin-left: 20px;
+      margin-top: 8px;
+      padding: 10px;
+      background: #e0f2fe;
+      border-left: 3px solid #0284c7;
+      border-radius: 4px;
+    }
+    
+    .nested-title {
+      font-weight: bold;
+      color: #0369a1;
+      margin-bottom: 5px;
+    }
+    
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .flow-box {
+      flex: 1;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .flow-box-title {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    
+    .flow-box-desc {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    
+    .flow-arrow {
+      font-size: 30px;
+      color: #667eea;
+      font-weight: bold;
+    }
+    
+    .example-box {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+    }
+    
+    .example-box pre {
+      margin: 0;
+      white-space: pre;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    
+    .example-title {
+      font-weight: bold;
+      color: #d97706;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .relationship {
+      background: #f1f5f9;
+      border-left: 5px solid #0ea5e9;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    
+    .relationship-title {
+      font-weight: bold;
+      color: #0284c7;
+      margin-bottom: 8px;
+    }
+    
+    .import-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .import-step {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+    
+    .step-number {
+      background: #3b82f6;
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .step-title {
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+    
+    .step-desc {
+      font-size: 12px;
+      color: #64748b;
+    }
+    
+    .highlight {
+      background: #dbeafe;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #1e40af;
+      font-weight: bold;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      margin: 2px;
+    }
+    
+    .status-waiting { background: #fef3c7; color: #92400e; }
+    .status-progress { background: #dbeafe; color: #1e40af; }
+    .status-complete { background: #d1fae5; color: #065f46; }
+    .status-failed { background: #fee2e2; color: #991b1b; }
+    .status-blocked { background: #f3f4f6; color: #374151; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 Job Management Pipeline System - Complete Architecture</h1>
+    
+    <!-- SECTION 1: CORE SCHEMAS -->
+    <div class="section">
+      <div class="section-header">📋 Core Data Schemas</div>
+      <div class="section-content">
+        <div class="schema-grid">
+          
+          <!-- Pipeline Template Schema -->
+          <div class="schema-box">
+            <div class="schema-title">PipelineTemplate</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">templateId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Unique identifier</div>
+              </div>
+              <div class="field">
+                <span class="field-name">templateName</span>: <span class="field-type">string</span>
+                <div class="field-desc">Display name</div>
+              </div>
+              <div class="field">
+                <span class="field-name">description</span>: <span class="field-type">string</span>
+                <div class="field-desc">Template description</div>
+              </div>
+              <div class="field">
+                <span class="field-name">version</span>: <span class="field-type">string</span>
+                <div class="field-desc">Template version (e.g., "1.0.0")</div>
+              </div>
+              <div class="field">
+                <span class="field-name">customFields</span>: <span class="field-type">FieldDefinition[]</span>
+                <div class="nested">
+                  <div class="nested-title">FieldDefinition:</div>
+                  • fieldId: string<br>
+                  • label: string<br>
+                  • type: "text" | "number" | "date" | "select" | "checkbox" | "color"<br>
+                  • required: boolean<br>
+                  • defaultValue: any<br>
+                  • validation: { min, max, pattern, options }
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-name">stages</span>: <span class="field-type">Stage[]</span>
+                <div class="field-desc">Pipeline stages</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage Schema -->
+          <div class="schema-box">
+            <div class="schema-title">Stage</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">stageId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Unique identifier</div>
+              </div>
+              <div class="field">
+                <span class="field-name">stageName</span>: <span class="field-type">string</span>
+                <div class="field-desc">Display name</div>
+              </div>
+              <div class="field">
+                <span class="field-name">dependsOn</span>: <span class="field-type">string[]</span>
+                <div class="field-desc">Stage IDs that must complete first</div>
+              </div>
+              <div class="field">
+                <span class="field-name">steps</span>: <span class="field-type">StepTemplate[]</span>
+                <div class="field-desc">Steps within this stage</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Template Schema -->
+          <div class="schema-box">
+            <div class="schema-title">StepTemplate</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">stepId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Unique identifier</div>
+              </div>
+              <div class="field">
+                <span class="field-name">stepName</span>: <span class="field-type">string</span>
+                <div class="field-desc">Display name (can use ${variables})</div>
+              </div>
+              <div class="field">
+                <span class="field-name">dependsOn</span>: <span class="field-type">string[]</span>
+                <div class="field-desc">Step IDs that must complete first</div>
+              </div>
+              <div class="field">
+                <span class="field-name">qaTemplateId</span>: <span class="field-type">string</span>
+                <div class="field-desc">QA checklist template reference</div>
+              </div>
+              <div class="field">
+                <span class="field-name">materialRequirements</span>: <span class="field-type">MaterialTemplate[]</span>
+                <div class="nested">
+                  <div class="nested-title">MaterialTemplate:</div>
+                  • materialName: string (can use ${variables})<br>
+                  • quantity: string | number (can use ${variables})<br>
+                  • unit: string<br>
+                  • required: boolean
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-name">estimatedDuration</span>: <span class="field-type">number</span>
+                <div class="field-desc">Duration in minutes</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job Schema -->
+          <div class="schema-box">
+            <div class="schema-title">Job</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">jobId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Unique identifier</div>
+              </div>
+              <div class="field">
+                <span class="field-name">templateId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Pipeline template reference</div>
+              </div>
+              <div class="field">
+                <span class="field-name">jobName</span>: <span class="field-type">string</span>
+                <div class="field-desc">Core field: Job name</div>
+              </div>
+              <div class="field">
+                <span class="field-name">orderNo</span>: <span class="field-type">string</span>
+                <div class="field-desc">Core field: Order number</div>
+              </div>
+              <div class="field">
+                <span class="field-name">dueDate</span>: <span class="field-type">string</span>
+                <div class="field-desc">Core field: Due date</div>
+              </div>
+              <div class="field">
+                <span class="field-name">assignedTo</span>: <span class="field-type">string</span>
+                <div class="field-desc">Core field: Assigned user/team</div>
+              </div>
+              <div class="field">
+                <span class="field-name">status</span>: <span class="field-type">string</span>
+                <div class="field-desc">"pending" | "in-progress" | "completed" | "failed"</div>
+              </div>
+              <div class="field">
+                <span class="field-name">customFieldValues</span>: <span class="field-type">object</span>
+                <div class="field-desc">Key-value pairs for template custom fields</div>
+              </div>
+              <div class="field">
+                <span class="field-name">stageExecutions</span>: <span class="field-type">StageExecution[]</span>
+                <div class="field-desc">Runtime stage data</div>
+              </div>
+              <div class="field">
+                <span class="field-name">createdAt</span>: <span class="field-type">timestamp</span>
+              </div>
+              <div class="field">
+                <span class="field-name">updatedAt</span>: <span class="field-type">timestamp</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage Execution Schema -->
+          <div class="schema-box">
+            <div class="schema-title">StageExecution</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">stageId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Reference to stage template</div>
+              </div>
+              <div class="field">
+                <span class="field-name">status</span>: <span class="field-type">string</span>
+                <div class="field-desc">"waiting" | "in-progress" | "completed" | "failed" | "blocked"</div>
+              </div>
+              <div class="field">
+                <span class="field-name">startedAt</span>: <span class="field-type">timestamp</span>
+              </div>
+              <div class="field">
+                <span class="field-name">completedAt</span>: <span class="field-type">timestamp</span>
+              </div>
+              <div class="field">
+                <span class="field-name">stepExecutions</span>: <span class="field-type">StepExecution[]</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Execution Schema -->
+          <div class="schema-box">
+            <div class="schema-title">StepExecution</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">stepId</span>: <span class="field-type">string</span>
+                <div class="field-desc">Reference to step template</div>
+              </div>
+              <div class="field">
+                <span class="field-name">status</span>: <span class="field-type">string</span>
+                <div class="field-desc">
+                  <span class="status-badge status-waiting">waiting</span>
+                  <span class="status-badge status-progress">in-progress</span>
+                  <span class="status-badge status-complete">completed</span>
+                  <span class="status-badge status-failed">failed</span>
+                  <span class="status-badge status-blocked">blocked</span>
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-name">assignedTo</span>: <span class="field-type">string</span>
+              </div>
+              <div class="field">
+                <span class="field-name">startedAt</span>: <span class="field-type">timestamp</span>
+              </div>
+              <div class="field">
+                <span class="field-name">completedAt</span>: <span class="field-type">timestamp</span>
+              </div>
+              <div class="field">
+                <span class="field-name">qaChecklistData</span>: <span class="field-type">object</span>
+                <div class="field-desc">Filled QA form data</div>
+              </div>
+              <div class="field">
+                <span class="field-name">materials</span>: <span class="field-type">MaterialExecution[]</span>
+                <div class="nested">
+                  <div class="nested-title">MaterialExecution:</div>
+                  • materialName: string (resolved from template)<br>
+                  • quantity: number (resolved from template)<br>
+                  • unit: string<br>
+                  • status: "available" | "ordered" | "missing"<br>
+                  • usedQuantity: number<br>
+                  • notes: string
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-name">notes</span>: <span class="field-type">string</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- QA Template Schema -->
+          <div class="schema-box">
+            <div class="schema-title">QATemplate</div>
+            <div class="schema-body">
+              <div class="field">
+                <span class="field-name">templateId</span>: <span class="field-type">string</span>
+              </div>
+              <div class="field">
+                <span class="field-name">templateName</span>: <span class="field-type">string</span>
+              </div>
+              <div class="field">
+                <span class="field-name">fields</span>: <span class="field-type">QAFieldDefinition[]</span>
+                <div class="nested">
+                  <div class="nested-title">QAFieldDefinition:</div>
+                  • fieldId: string<br>
+                  • label: string<br>
+                  • type: "text" | "number" | "checkbox" | "select" | "date" | "file"<br>
+                  • required: boolean<br>
+                  • validation: { min, max, pattern, options }<br>
+                  • helpText: string
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: RELATIONSHIPS -->
+    <div class="section">
+      <div class="section-header">🔗 Schema Relationships</div>
+      <div class="section-content">
+        
+        <div class="relationship">
+          <div class="relationship-title">1. PipelineTemplate → Job (1:Many)</div>
+          One template can create many job instances. Job stores <span class="highlight">templateId</span> reference.
+        </div>
+
+        <div class="relationship">
+          <div class="relationship-title">2. PipelineTemplate → QATemplate (Many:Many)</div>
+          Steps in template reference QA templates via <span class="highlight">qaTemplateId</span>. Multiple templates can share same QA checklist.
+        </div>
+
+        <div class="relationship">
+          <div class="relationship-title">3. Job → StageExecution (1:Many)</div>
+          Job instantiates stages from template. Each stage creates runtime execution record.
+        </div>
+
+        <div class="relationship">
+          <div class="relationship-title">4. StageExecution → StepExecution (1:Many)</div>
+          Stage contains multiple steps. Each step has execution record with status, QA data, materials.
+        </div>
+
+        <div class="relationship">
+          <div class="relationship-title">5. StepTemplate → StepExecution (1:Many)</div>
+          Template defines structure, execution stores runtime data. StepExecution references <span class="highlight">stepId</span>.
+        </div>
+
+        <div class="relationship">
+          <div class="relationship-title">6. Variable Substitution</div>
+          Job's <span class="highlight">customFieldValues</span> replace <span class="highlight">${variableName}</span> in template fields (step names, material quantities, etc.)
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3: SYSTEM FLOW -->
+    <div class="section">
+      <div class="section-header">🔄 System Flow</div>
+      <div class="section-content">
+        
+        <div class="flow-diagram">
+          <div class="flow-row">
+            <div class="flow-box">
+              <div class="flow-box-title">1. Template Creation</div>
+              <div class="flow-box-desc">Admin creates PipelineTemplate with stages, steps, custom fields, QA templates</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-box-title">2. Job Creation</div>
+              <div class="flow-box-desc">User selects template, fills custom fields, creates Job instance</div>
+            </div>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-box">
+              <div class="flow-box-title">3. Job Instantiation</div>
+              <div class="flow-box-desc">System resolves ${variables}, creates StageExecutions and StepExecutions</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-box-title">4. Dependency Resolution</div>
+              <div class="flow-box-desc">Calculate which steps can start (no dependencies or all dependencies completed)</div>
+            </div>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-box">
+              <div class="flow-box-title">5. Step Execution</div>
+              <div class="flow-box-desc">Worker opens step, checks materials, fills QA checklist</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-box-title">6. QA Validation</div>
+              <div class="flow-box-desc">System validates QA data against template schema</div>
+            </div>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-box">
+              <div class="flow-box-title">7. Step Completion</div>
+              <div class="flow-box-desc">Mark step as completed, trigger dependent steps</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-box-title">8. Job Completion</div>
+              <div class="flow-box-desc">All steps complete → Stage complete → Job complete</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 4: EXCEL IMPORT -->
+    <div class="section">
+      <div class="section-header">📊 Excel Import Wizard Flow</div>
+      <div class="section-content">
+        
+        <div class="import-steps">
+          <div class="import-step">
+            <div class="step-number">1</div>
+            <div class="step-title">Upload Excel</div>
+            <div class="step-desc">User uploads .xlsx file with job data</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">2</div>
+            <div class="step-title">Select Template</div>
+            <div class="step-desc">Choose which PipelineTemplate to use</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">3</div>
+            <div class="step-title">Column Mapping</div>
+            <div class="step-desc">Map Excel columns to job fields (core + custom)</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">4</div>
+            <div class="step-title">Missing Fields</div>
+            <div class="step-desc">Handle unmapped required fields (default values or per-row)</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">5</div>
+            <div class="step-title">Validation</div>
+            <div class="step-desc">Validate all rows against template schema</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">6</div>
+            <div class="step-title">Preview</div>
+            <div class="step-desc">Show jobs to be created, highlight errors</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">7</div>
+            <div class="step-title">Import</div>
+            <div class="step-desc">Bulk create Job instances</div>
+          </div>
+
+          <div class="import-step">
+            <div class="step-number">8</div>
+            <div class="step-title">Instantiate</div>
+            <div class="step-desc">Create StageExecutions and StepExecutions for each job</div>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example Excel Import Scenario:</div>
+<pre><strong>Template:</strong> "Standard Welding Job"
+<strong>Custom Fields:</strong> plateQuantity (required), rodQuantity (required), certificationRequired (required)
+
+<strong>Excel Upload:</strong>
+| Order No | Client Name | Due Date   | Steel Qty | Notes          |
+|----------|-------------|------------|-----------|----------------|
+| ORD-001  | ABC Corp    | 2025-11-15 | 10        | Urgent job     |
+| ORD-002  | XYZ Ltd     | 2025-11-20 | 5         | Standard order |
+
+<strong>Column Mapping:</strong>
+Order No → orderNo ✓
+Client Name → jobName ✓
+Due Date → dueDate ✓
+Steel Qty → customFieldValues.plateQuantity ✓
+
+<strong>Missing Required Fields:</strong>
+❌ rodQuantity
+❌ certificationRequired
+
+<strong>User Action:</strong>
+Set default: rodQuantity = 5 (for all rows)
+Set default: certificationRequired = "AWS D1.1" (for all rows)
+
+<strong>Result:</strong>
+✓ 2 jobs created successfully with all required fields</pre>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 5: EXAMPLE DATA -->
+    <div class="section">
+      <div class="section-header">💡 Example: Welding Job Template</div>
+      <div class="section-content">
+        
+        <div class="example-box">
+<pre><strong>PipelineTemplate:</strong>
+{
+  "templateId": "welding_job_v1",
+  "templateName": "Standard Welding Job",
+  "version": "1.0.0",
+  "customFields": [
+    {
+      "fieldId": "plateQuantity",
+      "label": "Steel Plate Quantity",
+      "type": "number",
+      "required": true,
+      "min": 1,
+      "unit": "sheets"
+    },
+    {
+      "fieldId": "rodQuantity",
+      "label": "Welding Rod Quantity",
+      "type": "number",
+      "required": true,
+      "unit": "kg"
+    },
+    {
+      "fieldId": "certificationRequired",
+      "label": "Certification",
+      "type": "select",
+      "options": ["AWS D1.1", "ASME IX", "None"],
+      "required": true
+    }
+  ],
+  "stages": [
+    {
+      "stageId": "prep",
+      "stageName": "Preparation",
+      "dependsOn": [],
+      "steps": [
+        {
+          "stepId": "material_check",
+          "stepName": "Material Verification for ${jobName}",
+          "dependsOn": [],
+          "qaTemplateId": "material_qa_v1",
+          "materialRequirements": [
+            {
+              "materialName": "Steel Plate",
+              "quantity": "${plateQuantity}",
+              "unit": "sheets",
+              "required": true
+            },
+            {
+              "materialName": "Welding Rod",
+              "quantity": "${rodQuantity}",
+              "unit": "kg",
+              "required": true
+            }
+          ]
+        },
+        {
+          "stepId": "equipment_setup",
+          "stepName": "Equipment Setup",
+          "dependsOn": [],
+          "qaTemplateId": "equipment_qa_v1"
+        }
+      ]
+    },
+    {
+      "stageId": "fabrication",
+      "stageName": "Fabrication",
+      "dependsOn": ["prep"],
+      "steps": [
+        {
+          "stepId": "welding",
+          "stepName": "Welding - ${certificationRequired}",
+          "dependsOn": ["material_check", "equipment_setup"],
+          "qaTemplateId": "welding_qa_v1",
+          "estimatedDuration": 120
+        }
+      ]
+    },
+    {
+      "stageId": "qa",
+      "stageName": "Quality Control",
+      "dependsOn": ["fabrication"],
+      "steps": [
+        {
+          "stepId": "inspection",
+          "stepName": "Final Inspection",
+          "dependsOn": ["welding"],
+          "qaTemplateId": "final_qa_v1"
+        }
+      ]
+    }
+  ]
+}
+
+<strong>Job Instance:</strong>
+{
+  "jobId": "job_001",
+  "templateId": "welding_job_v1",
+  "jobName": "ABC Corp Welding Project",
+  "orderNo": "ORD-001",
+  "dueDate": "2025-11-15",
+  "assignedTo": "Team A",
+  "status": "in-progress",
+  "customFieldValues": {
+    "plateQuantity": 10,
+    "rodQuantity": 5,
+    "certificationRequired": "AWS D1.1"
+  },
+  "stageExecutions": [
+    {
+      "stageId": "prep",
+      "status": "completed",
+      "startedAt": "2025-11-01T08:00:00Z",
+      "completedAt": "2025-11-01T10:30:00Z",
+      "stepExecutions": [
+        {
+          "stepId": "material_check",
+          "status": "completed",
+          "assignedTo": "John Doe",
+          "startedAt": "2025-11-01T08:00:00Z",
+          "completedAt": "2025-11-01T09:00:00Z",
+          "qaChecklistData": {
+            "plate_count": 10,
+            "plate_condition": "good",
+            "rod_weight": 5.2,
+            "inspector_signature": "John Doe"
+          },
+          "materials": [
+            {
+              "materialName": "Steel Plate",
+              "quantity": 10,
+              "unit": "sheets",
+              "status": "available",
+              "usedQuantity": 10
+            },
+            {
+              "materialName": "Welding Rod",
+              "quantity": 5,
+              "unit": "kg",
+              "status": "available",
+              "usedQuantity": 4.8
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</pre>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 6: KEY FEATURES -->
+    <div class="section">
+      <div class="section-header">⚙️ Key System Features</div>
+      <div class="section-content">
+        
+        <div class="schema-grid">
+          <div class="schema-box">
+            <div class="schema-title">Variable Substitution</div>
+            <div class="schema-body">
+              <div class="field">Template uses <span class="highlight">${variableName}</span> placeholders</div>
+              <div class="field">Job provides values in <span class="highlight">customFieldValues</span></div>
+              <div class="field">System resolves variables when instantiating job</div>
+              <div class="field">Works in: step names, material quantities, descriptions</div>
+            </div>
+          </div>
+
+          <div class="schema-box">
+            <div class="schema-title">Dependency Resolution</div>
+            <div class="schema-body">
+              <div class="field">Steps have <span class="highlight">dependsOn: [stepIds]</span></div>
+              <div class="field">Step status = "waiting" until dependencies complete</div>
+              <div class="field">Empty <span class="highlight">dependsOn</span> = can start immediately</div>
+              <div class="field">If dependency fails → dependent step becomes "blocked"</div>
+            </div>
+          </div>
+
+          <div class="schema-box">
+            <div class="schema-title">Dynamic Forms</div>
+            <div class="schema-body">
+              <div class="field">QA Templates define form schema as JSON</div>
+              <div class="field">Form renderer creates HTML inputs dynamically</div>
+              <div class="field">Validator enforces required fields, types, ranges</div>
+              <div class="field">Same system for custom job fields and QA checklists</div>
+            </div>
+          </div>
+
+          <div class="schema-box">
+            <div class="schema-title">Excel Import Mapping</div>
+            <div class="schema-body">
+              <div class="field">Parse Excel → get columns and rows</div>
+              <div class="field">User maps columns → template fields</div>
+              <div class="field">Auto-detect common field names</div>
+              <div class="field">Handle missing required fields with defaults or per-row entry</div>
+            </div>
+          </div>
+
+          <div class="schema-box">
+            <div class="schema-title">Material Tracking</div>
+            <div class="schema-body">
+              <div class="field">Template defines required materials with ${variables}</div>
+              <div class="field">Job instantiation resolves actual quantities</div>
+              <div class="field">Step execution tracks used vs. required amounts</div>
+              <div class="field">Material status: available, ordered, missing</div>
+            </div>
+          </div>
+
+          <div class="schema-box">
+            <div class="schema-title">Status Tracking</div>
+            <div class="schema-body">
+              <div class="field"><span class="status-badge status-waiting">Waiting</span> Dependencies not met</div>
+              <div class="field"><span class="status-badge status-progress">In Progress</span> Step started</div>
+              <div class="field"><span class="status-badge status-complete">Completed</span> QA passed</div>
+              <div class="field"><span class="status-badge status-failed">Failed</span> QA failed or error</div>
+              <div class="field"><span class="status-badge status-blocked">Blocked</span> Dependency failed</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

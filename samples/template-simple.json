@@ -1,0 +1,87 @@
+{
+  "templateId": "simple_assembly_v1",
+  "templateName": "Basic Product Assembly",
+  "description": "Simple 3-stage assembly process for general products",
+  "version": "1.0.0",
+  "customFields": [],
+  "stages": [
+    {
+      "stageId": "prep",
+      "stageName": "Preparation",
+      "order": 1,
+      "steps": [
+        {
+          "stepId": "gather_parts",
+          "stepName": "Gather Parts",
+          "description": "Collect all required components from inventory",
+          "order": 1,
+          "requirements": [
+            "Main housing unit",
+            "Screws (x10)",
+            "Washers (x10)",
+            "Assembly instructions",
+            "Packaging materials"
+          ],
+          "checklist": [
+            "All parts present and accounted for",
+            "Parts are in good condition",
+            "Correct part numbers verified",
+            "Work area is clean and organized"
+          ]
+        }
+      ]
+    },
+    {
+      "stageId": "assembly",
+      "stageName": "Assembly",
+      "order": 2,
+      "steps": [
+        {
+          "stepId": "assemble",
+          "stepName": "Assemble Product",
+          "description": "Follow assembly instructions step by step",
+          "order": 1,
+          "requirements": [
+            "Screwdriver set",
+            "Allen keys",
+            "Work surface",
+            "Assembly instructions"
+          ],
+          "checklist": [
+            "Housing components aligned correctly",
+            "All screws tightened to spec",
+            "No loose or missing parts",
+            "Product functions as expected",
+            "Assembly matches instructions"
+          ]
+        }
+      ]
+    },
+    {
+      "stageId": "qa",
+      "stageName": "Quality Check",
+      "order": 3,
+      "steps": [
+        {
+          "stepId": "inspect",
+          "stepName": "Final Inspection",
+          "description": "Verify product meets quality standards",
+          "order": 1,
+          "requirements": [
+            "Inspection checklist",
+            "Measuring tools (if applicable)"
+          ],
+          "checklist": [
+            "Product functions correctly",
+            "No visible defects or damage",
+            "All components secure",
+            "Product meets specifications",
+            "Ready for packaging"
+          ]
+        }
+      ]
+    }
+  ],
+  "createdAt": "2025-11-01T00:00:00Z",
+  "createdBy": "system"
+}

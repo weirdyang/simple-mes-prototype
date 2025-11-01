@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Management System - UML Class Diagram</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', monospace;
+      background: #f8fafc;
+      padding: 20px;
+      font-size: 12px;
+    }
+    
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-family: 'Segoe UI', sans-serif;
+      color: #1e293b;
+    }
+    
+    .diagram-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .class-box {
+      border: 3px solid #1e293b;
+      border-radius: 4px;
+      background: white;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .class-header {
+      background: #1e293b;
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      border-bottom: 3px solid #1e293b;
+    }
+    
+    .class-stereotype {
+      font-size: 11px;
+      color: #94a3b8;
+      font-style: italic;
+    }
+    
+    .class-section {
+      padding: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .class-section:last-child {
+      border-bottom: none;
+      flex-grow: 1;
+    }
+    
+    .section-title {
+      font-weight: bold;
+      color: #475569;
+      margin-bottom: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .attribute {
+      padding: 4px 0;
+      color: #334155;
+      line-height: 1.6;
+    }
+    
+    .attribute-visibility {
+      color: #059669;
+      font-weight: bold;
+    }
+    
+    .attribute-name {
+      color: #0284c7;
+    }
+    
+    .attribute-type {
+      color: #7c3aed;
+      font-style: italic;
+    }
+    
+    .method {
+      padding: 4px 0;
+      color: #334155;
+      line-height: 1.6;
+    }
+    
+    .method-name {
+      color: #dc2626;
+    }
+    
+    .relationships {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    
+    .relationships h2 {
+      font-family: 'Segoe UI', sans-serif;
+      margin-bottom: 15px;
+      color: #1e293b;
+    }
+    
+    .relationship-item {
+      padding: 10px;
+      margin: 8px 0;
+      background: white;
+      border-left: 4px solid #3b82f6;
+      border-radius: 4px;
+    }
+    
+    .rel-type {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 10px;
+      margin-right: 8px;
+    }
+    
+    .enum-box {
+      border: 3px solid #7c3aed;
+      background: #faf5ff;
+    }
+    
+    .enum-box .class-header {
+      background: #7c3aed;
+    }
+    
+    .interface-box {
+      border: 3px dashed #059669;
+      background: #f0fdf4;
+    }
+    
+    .interface-box .class-header {
+      background: #059669;
+    }
+    
+    .abstract-box {
+      border: 3px solid #dc2626;
+      background: #fef2f2;
+    }
+    
+    .abstract-box .class-header {
+      background: #dc2626;
+      font-style: italic;
+    }
+    
+    .notes {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 8px;
+    }
+    
+    .notes-title {
+      font-weight: bold;
+      color: #92400e;
+      margin-bottom: 8px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+    
+    .legend-box {
+      width: 30px;
+      height: 20px;
+      border: 2px solid;
+      border-radius: 3px;
+    }
+    
+    .wide-box {
+      grid-column: span 2;
+    }
+    
+    .full-width {
+      grid-column: span 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📐 Job Management Pipeline System - UML Class Diagram</h1>
+    
+    <!-- TEMPLATE LAYER -->
+    <h2 style="margin: 20px 0; color: #1e293b; font-family: 'Segoe UI', sans-serif;">Template Layer (Definitions)</h2>
+    <div class="diagram-container">
+      
+      <!-- PipelineTemplate -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          PipelineTemplate
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">description</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">version</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">customFields</span>: <span class="attribute-type">FieldDefinition[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stages</span>: <span class="attribute-type">Stage[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">createdAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">instantiate</span>(customFieldValues): Job
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">validate</span>(): boolean
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">clone</span>(): PipelineTemplate
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          Stage
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stageId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stageName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">dependsOn</span>: <span class="attribute-type">string[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">condition</span>: <span class="attribute-type">StageCondition</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">steps</span>: <span class="attribute-type">StepTemplate[]</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">canStart</span>(completedStages): boolean
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">getParallelSteps</span>(): StepTemplate[]
+          </div>
+        </div>
+      </div>
+
+      <!-- StepTemplate -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          StepTemplate
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stepId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stepName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">dependsOn</span>: <span class="attribute-type">string[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">condition</span>: <span class="attribute-type">StepCondition</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requirements</span>: <span class="attribute-type">Requirement[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">outputs</span>: <span class="attribute-type">Output[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">qaTemplateId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">estimatedDuration</span>: <span class="attribute-type">number</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">resolveVariables</span>(values): StepTemplate
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">canStart</span>(completedSteps): boolean
+          </div>
+        </div>
+      </div>
+
+      <!-- FieldDefinition -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          FieldDefinition
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">fieldId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">label</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">type</span>: <span class="attribute-type">FieldType</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">required</span>: <span class="attribute-type">boolean</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">defaultValue</span>: <span class="attribute-type">any</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">validation</span>: <span class="attribute-type">ValidationRule</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">validate</span>(value): boolean
+          </div>
+        </div>
+      </div>
+
+      <!-- QATemplate -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          QATemplate
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">version</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">fields</span>: <span class="attribute-type">FieldDefinition[]</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">renderForm</span>(): HTMLElement
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">validate</span>(data): ValidationResult
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- REQUIREMENT & OUTPUT LAYER -->
+    <h2 style="margin: 20px 0; color: #1e293b; font-family: 'Segoe UI', sans-serif;">Requirements & Outputs (Polymorphic)</h2>
+    <div class="diagram-container">
+      
+      <!-- Requirement (Abstract) -->
+      <div class="class-box abstract-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;abstract&gt;&gt;</div>
+          Requirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requirementId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requirementType</span>: <span class="attribute-type">RequirementType</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">name</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">required</span>: <span class="attribute-type">boolean</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">isFulfilled</span>(): boolean
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">validate</span>(): boolean
+          </div>
+        </div>
+      </div>
+
+      <!-- MaterialRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          MaterialRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">quantity</span>: <span class="attribute-type">number | string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">unit</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">specification</span>: <span class="attribute-type">string</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QualificationRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          QualificationRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">certificationId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">expirationCheck</span>: <span class="attribute-type">boolean</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- UserRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          UserRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">allowedRoles</span>: <span class="attribute-type">string[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">allowedUsers</span>: <span class="attribute-type">string[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">minExperienceYears</span>: <span class="attribute-type">number</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ToolRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          ToolRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">toolId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">calibrationRequired</span>: <span class="attribute-type">boolean</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">lastCalibrationDate</span>: <span class="attribute-type">date</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ApprovalRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          ApprovalRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">approverRole</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">approvalType</span>: <span class="attribute-type">string</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DocumentRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          DocumentRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Requirement</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">documentType</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">uploadRequired</span>: <span class="attribute-type">boolean</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output (Abstract) -->
+      <div class="class-box abstract-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;abstract&gt;&gt;</div>
+          Output
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">outputId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">outputType</span>: <span class="attribute-type">OutputType</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">name</span>: <span class="attribute-type">string</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">isProduced</span>(): boolean
+          </div>
+        </div>
+      </div>
+
+      <!-- ArtifactOutput -->
+      <div class="class-box">
+        <div class="class-header">
+          ArtifactOutput
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Output</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">quantity</span>: <span class="attribute-type">number</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">passToSteps</span>: <span class="attribute-type">string[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">storageLocation</span>: <span class="attribute-type">string</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DocumentOutput -->
+      <div class="class-box">
+        <div class="class-header">
+          DocumentOutput
+        </div>
+        <div class="class-section">
+          <div class="section-title">Extends: Output</div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">documentType</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">template</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requiredForCompletion</span>: <span class="attribute-type">boolean</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXECUTION LAYER -->
+    <h2 style="margin: 20px 0; color: #1e293b; font-family: 'Segoe UI', sans-serif;">Execution Layer (Runtime)</h2>
+    <div class="diagram-container">
+      
+      <!-- Job -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          Job
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">jobId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">jobName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">orderNo</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">dueDate</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">assignedTo</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">status</span>: <span class="attribute-type">JobStatus</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">customFieldValues</span>: <span class="attribute-type">object</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stageExecutions</span>: <span class="attribute-type">StageExecution[]</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">getTemplate</span>(): PipelineTemplate
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">getAvailableSteps</span>(): StepExecution[]
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">calculateProgress</span>(): number
+          </div>
+        </div>
+      </div>
+
+      <!-- StageExecution -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          StageExecution
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stageId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">status</span>: <span class="attribute-type">ExecutionStatus</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">startedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">completedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stepExecutions</span>: <span class="attribute-type">StepExecution[]</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">canStart</span>(): boolean
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">calculateDuration</span>(): number
+          </div>
+        </div>
+      </div>
+
+      <!-- StepExecution -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          StepExecution
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">stepId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">status</span>: <span class="attribute-type">ExecutionStatus</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">assignedTo</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">startedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">completedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">qaChecklistData</span>: <span class="attribute-type">object</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requirementsFulfilled</span>: <span class="attribute-type">FulfilledRequirement[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">outputsProduced</span>: <span class="attribute-type">ProducedOutput[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">notes</span>: <span class="attribute-type">string</span>
+          </div>
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">canStart</span>(): boolean
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">start</span>(user): void
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">complete</span>(qaData): void
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">fail</span>(reason): void
+          </div>
+        </div>
+      </div>
+
+      <!-- FulfilledRequirement -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          FulfilledRequirement
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">requirementId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">fulfilled</span>: <span class="attribute-type">boolean</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">verifiedBy</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">verifiedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">metadata</span>: <span class="attribute-type">object</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ProducedOutput -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          ProducedOutput
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">outputId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">produced</span>: <span class="attribute-type">boolean</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">producedAt</span>: <span class="attribute-type">timestamp</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">metadata</span>: <span class="attribute-type">object</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ENUMS -->
+    <h2 style="margin: 20px 0; color: #1e293b; font-family: 'Segoe UI', sans-serif;">Enumerations</h2>
+    <div class="diagram-container">
+      
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          FieldType
+        </div>
+        <div class="class-section">
+          <div class="attribute">TEXT</div>
+          <div class="attribute">NUMBER</div>
+          <div class="attribute">DATE</div>
+          <div class="attribute">SELECT</div>
+          <div class="attribute">CHECKBOX</div>
+          <div class="attribute">TEXTAREA</div>
+          <div class="attribute">COLOR</div>
+          <div class="attribute">FILE</div>
+        </div>
+      </div>
+
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          RequirementType
+        </div>
+        <div class="class-section">
+          <div class="attribute">MATERIAL</div>
+          <div class="attribute">QUALIFICATION</div>
+          <div class="attribute">TOOL</div>
+          <div class="attribute">USER</div>
+          <div class="attribute">APPROVAL</div>
+          <div class="attribute">DOCUMENT</div>
+          <div class="attribute">CUSTOM</div>
+        </div>
+      </div>
+
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          OutputType
+        </div>
+        <div class="class-section">
+          <div class="attribute">ARTIFACT</div>
+          <div class="attribute">DOCUMENT</div>
+          <div class="attribute">MATERIAL</div>
+          <div class="attribute">DATA</div>
+          <div class="attribute">APPROVAL</div>
+        </div>
+      </div>
+
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          ExecutionStatus
+        </div>
+        <div class="class-section">
+          <div class="attribute">WAITING</div>
+          <div class="attribute">READY</div>
+          <div class="attribute">IN_PROGRESS</div>
+          <div class="attribute">COMPLETED</div>
+          <div class="attribute">FAILED</div>
+          <div class="attribute">BLOCKED</div>
+          <div class="attribute">SKIPPED</div>
+        </div>
+      </div>
+
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          StepCondition
+        </div>
+        <div class="class-section">
+          <div class="attribute">SUCCEEDED</div>
+          <div class="attribute">FAILED</div>
+          <div class="attribute">ALWAYS</div>
+          <div class="attribute">SUCCEEDED_OR_FAILED</div>
+          <div class="attribute">CUSTOM</div>
+        </div>
+      </div>
+
+      <div class="class-box enum-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;enumeration&gt;&gt;</div>
+          JobStatus
+        </div>
+        <div class="class-section">
+          <div class="attribute">PENDING</div>
+          <div class="attribute">IN_PROGRESS</div>
+          <div class="attribute">COMPLETED</div>
+          <div class="attribute">FAILED</div>
+          <div class="attribute">CANCELLED</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- IMPORT SYSTEM -->
+    <h2 style="margin: 20px 0; color: #1e293b; font-family: 'Segoe UI', sans-serif;">Import System</h2>
+    <div class="diagram-container">
+      
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;service&gt;&gt;</div>
+          ExcelImporter
+        </div>
+        <div class="class-section">
+          <div class="section-title">Methods</div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">parseExcel</span>(file): ParsedData
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">detectColumns</span>(headers): ColumnMapping[]
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">validateRows</span>(data, template): ValidationResult[]
+          </div>
+          <div class="method">
+            <span class="attribute-visibility">+</span>
+            <span class="method-name">bulkCreateJobs</span>(data): Job[]
+          </div>
+        </div>
+      </div>
+
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          ColumnMapping
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">excelColumn</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">fieldPath</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">confidence</span>: <span class="attribute-type">number</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          ValidationResult
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">rowIndex</span>: <span class="attribute-type">number</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">valid</span>: <span class="attribute-type">boolean</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">errors</span>: <span class="attribute-type">ValidationError[]</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RELATIONSHIPS -->
+    <div class="relationships">
+      <h2>🔗 Class Relationships</h2>
+      
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>PipelineTemplate</strong> ◆——— <strong>Stage</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>Stage</strong> ◆——— <strong>StepTemplate</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>PipelineTemplate</strong> ◆——— <strong>FieldDefinition</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>StepTemplate</strong> ◆——— <strong>Requirement</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>StepTemplate</strong> ◆——— <strong>Output</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">ASSOCIATION</span>
+        <strong>StepTemplate</strong> ———→ <strong>QATemplate</strong> (via qaTemplateId)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">ASSOCIATION</span>
+        <strong>Job</strong> ———→ <strong>PipelineTemplate</strong> (via templateId)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>Job</strong> ◆——— <strong>StageExecution</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>StageExecution</strong> ◆——— <strong>StepExecution</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">ASSOCIATION</span>
+        <strong>StageExecution</strong> ———→ <strong>Stage</strong> (via stageId)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">ASSOCIATION</span>
+        <strong>StepExecution</strong> ———→ <strong>StepTemplate</strong> (via stepId)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>StepExecution</strong> ◆——— <strong>FulfilledRequirement</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">COMPOSITION</span>
+        <strong>StepExecution</strong> ◆——— <strong>ProducedOutput</strong> (1 to many)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>MaterialRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>QualificationRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>UserRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>ToolRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>ApprovalRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>DocumentRequirement</strong> ——▷ <strong>Requirement</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>ArtifactOutput</strong> ——▷ <strong>Output</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">INHERITANCE</span>
+        <strong>DocumentOutput</strong> ——▷ <strong>Output</strong>
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">DEPENDENCY</span>
+        <strong>ExcelImporter</strong> - - -→ <strong>Job</strong> (creates)
+      </div>
+
+      <div class="relationship-item">
+        <span class="rel-type">DEPENDENCY</span>
+        <strong>ExcelImporter</strong> - - -→ <strong>PipelineTemplate</strong> (uses for validation)
+      </div>
+
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-box" style="background: white; border-color: #1e293b;"></div>
+        <span>Standard Class</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background: #fef2f2; border-color: #dc2626;"></div>
+        <span>Abstract Class</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background: #faf5ff; border-color: #7c3aed;"></div>
+        <span>Enumeration</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background: #f0fdf4; border-color: #059669; border-style: dashed;"></div>
+        <span>Interface</span>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="notes">
+      <div class="notes-title">📝 Key Design Notes:</div>
+      <div style="line-height: 1.8; color: #78350f;">
+        <strong>1. Polymorphism:</strong> Requirement and Output are abstract base classes with specific implementations (Material, Qualification, User, Tool, etc.)<br>
+        <strong>2. Template-Instance Pattern:</strong> Templates define structure, Executions store runtime data<br>
+        <strong>3. Variable Substitution:</strong> Templates use ${variableName}, resolved at Job instantiation from customFieldValues<br>
+        <strong>4. Dependency Graph:</strong> Both Stage and StepTemplate have dependsOn arrays for sequential/parallel execution<br>
+        <strong>5. Condition Logic:</strong> Optional condition field (defaults to SUCCEEDED) controls when steps run<br>
+        <strong>6. Composition over Inheritance:</strong> Heavy use of composition (◆) for flexibility<br>
+        <strong>7. Value Objects:</strong> FulfilledRequirement, ProducedOutput, ColumnMapping are immutable value objects<br>
+        <strong>8. Service Layer:</strong> ExcelImporter is a stateless service for bulk operations
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
