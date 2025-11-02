@@ -796,17 +796,20 @@ const app = {
 
   openStepExecution(stageIndex, stepIndex) {
     const job = this.editingJob;
+    let canStart = true;
     if(stageIndex > 0) {
       const prevStage = job.stageExecutions[stageIndex - 1];
       if(prevStage.stepExecutions.some(s => s.status !== 'completed')) {
-        alert('Please complete all steps in the previous stage first.');
-        return
+        canStart = false;
+
+        return;
       }
     }
     if (stepIndex > 0) {
       const prevStep = stage.stepExecutions[stepIndex - 1];
       if (prevStep.status !== 'completed' && step.status === 'pending') {
-        alert('Please complete the previous step first.');
+        canStart = false;
+        
         return;
       }
     }
@@ -847,7 +850,7 @@ const app = {
     const btnStart = document.getElementById('btnStartStep');
     const btnComplete = document.getElementById('btnCompleteStep');
     
-    if (step.status === 'pending') {
+    if (step.status === 'pending' && canStart) {
       btnStart.style.display = 'inline-block';
       btnComplete.style.display = 'none';
     } else if (step.status === 'in-progress') {
@@ -867,8 +870,25 @@ const app = {
   },
 
   startStep() {
+    const job = this.editingJob;
     const { stageIndex, stepIndex, step } = this.editingStep;
-    
+    let canStart = true;
+    if(stageIndex > 0) {
+      const prevStage = job.stageExecutions[stageIndex - 1];
+      if(prevStage.stepExecutions.some(s => s.status !== 'completed')) {
+        canStart = false;
+        alert('Please complete the previous stage first.');
+        return;
+      }
+    }
+    if (stepIndex > 0) {
+      const prevStep = stage.stepExecutions[stepIndex - 1];
+      if (prevStep.status !== 'completed' && step.status === 'pending') {
+        canStart = false;
+        alert('Please complete the previous step first.');
+        return;
+      }
+    }
     step.status = 'in-progress';
     step.startedAt = Date.now();
     step.startedBy = this.currentUser.userId;
