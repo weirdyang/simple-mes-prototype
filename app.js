@@ -189,7 +189,7 @@ const app = {
   login() {
     const username = document.getElementById('loginUsername').value;
     const role = document.getElementById('loginRole').value;
-    
+
     if (!username) {
       alert('Please enter a username');
       return;
@@ -238,7 +238,7 @@ const app = {
   // Navigation
   updateNav() {
     const role = this.currentUser.role;
-    
+
     // Hide config for non-admins
     const configBtn = document.querySelector('[data-view="config"]');
     if (role !== 'admin') {
@@ -272,7 +272,7 @@ const app = {
     this.currentView = viewName;
 
     // Load view data
-    switch(viewName) {
+    switch (viewName) {
       case 'dashboard':
         this.loadDashboard();
         break;
@@ -307,7 +307,7 @@ const app = {
     // My jobs list
     const myJobsList = document.getElementById('myJobsList');
     const assignedJobs = this.data.jobs.filter(j => j.assignedTo === this.currentUser.userId);
-    
+
     if (assignedJobs.length === 0) {
       myJobsList.innerHTML = '<p style="color: #6b7280;">No jobs assigned to you</p>';
     } else {
@@ -352,7 +352,7 @@ const app = {
   // Templates
   loadTemplates() {
     const templatesList = document.getElementById('templatesList');
-    
+
     if (this.data.templates.length === 0) {
       templatesList.innerHTML = '<p style="color: #6b7280;">No templates created yet. Click "Create Template" to get started.</p>';
       return;
@@ -361,7 +361,7 @@ const app = {
     templatesList.innerHTML = this.data.templates.map(template => {
       const stageCount = template.stages.length;
       const stepCount = template.stages.reduce((sum, stage) => sum + stage.steps.length, 0);
-      
+
       return `
         <div class="card">
           <div class="card-header">
@@ -391,12 +391,12 @@ const app = {
       createdAt: Date.now(),
       createdBy: this.currentUser.userId
     };
-    
+
     document.getElementById('templateBuilderTitle').textContent = 'Create Template';
     document.getElementById('templateName').value = '';
     document.getElementById('templateDescription').value = '';
     document.getElementById('stagesList').innerHTML = '';
-    
+
     document.getElementById('templateBuilderModal').classList.remove('hidden');
   },
 
@@ -405,11 +405,11 @@ const app = {
     if (!template) return;
 
     this.editingTemplate = JSON.parse(JSON.stringify(template)); // Deep clone
-    
+
     document.getElementById('templateBuilderTitle').textContent = 'Edit Template';
     document.getElementById('templateName').value = template.templateName;
     document.getElementById('templateDescription').value = template.description || '';
-    
+
     this.renderStages();
     document.getElementById('templateBuilderModal').classList.remove('hidden');
   },
@@ -483,7 +483,7 @@ const app = {
 
   renderStages() {
     const stagesList = document.getElementById('stagesList');
-    
+
     if (this.editingTemplate.stages.length === 0) {
       stagesList.innerHTML = '<p style="color: #6b7280;">No stages added yet</p>';
       return;
@@ -581,7 +581,7 @@ const app = {
 
   deleteTemplate(templateId) {
     if (!confirm('Are you sure you want to delete this template?')) return;
-    
+
     this.data.templates = this.data.templates.filter(t => t.templateId !== templateId);
     this.saveData();
     this.loadTemplates();
@@ -608,7 +608,7 @@ const app = {
     }
 
     if (searchTerm) {
-      filteredJobs = filteredJobs.filter(j => 
+      filteredJobs = filteredJobs.filter(j =>
         j.jobName.toLowerCase().includes(searchTerm) ||
         j.orderNo.toLowerCase().includes(searchTerm) ||
         (j.client && j.client.toLowerCase().includes(searchTerm))
@@ -623,7 +623,7 @@ const app = {
     jobsList.innerHTML = filteredJobs.map(job => {
       const assignedUser = this.data.users.find(u => u.userId === job.assignedTo);
       const progress = this.calculateJobProgress(job);
-      
+
       return `
         <div class="card">
           <div class="card-header">
@@ -732,7 +732,7 @@ const app = {
     this.saveData();
     this.closeJobCreator();
     this.loadJobs();
-    
+
     alert('Job created successfully!');
   },
 
@@ -748,7 +748,7 @@ const app = {
     document.getElementById('jobDetailDueDate').textContent = job.dueDate || 'Not set';
     document.getElementById('jobDetailStatus').textContent = job.status;
     document.getElementById('jobDetailStatus').className = 'badge badge-' + job.status;
-    
+
     const assignedUser = this.data.users.find(u => u.userId === job.assignedTo);
     document.getElementById('jobDetailAssignedTo').textContent = assignedUser ? assignedUser.fullName : 'Unassigned';
 
@@ -757,7 +757,7 @@ const app = {
     stagesList.innerHTML = job.stageExecutions.map((stage, stageIndex) => {
       const completedSteps = stage.stepExecutions.filter(s => s.status === 'completed').length;
       const totalSteps = stage.stepExecutions.length;
-      
+      const canStartStage = stageIndex === 0 || job.stageExecutions[stageIndex - 1].status === 'completed';
       return `
         <div class="job-stage">
           <div class="job-stage-header">
@@ -776,7 +776,7 @@ const app = {
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <span class="badge badge-${step.status}">${step.status}</span>
                   <button class="btn-primary" onclick="app.openStepExecution(${stageIndex}, ${stepIndex})">
-                    ${step.status === 'pending' ? 'Start' : 'View'}
+                    ${step.status === 'pending' || !canStartStage ? 'Start' : 'View'}
                   </button>
                 </div>
               </div>
@@ -794,29 +794,29 @@ const app = {
     document.getElementById('jobDetailModal').classList.add('hidden');
   },
 
-  openStepExecution(stageIndex, stepIndex) {
-    const job = this.editingJob;
+  validateSquentialSteps(job, stageIndex, stepIndex) {
     const stage = job.stageExecutions[stageIndex];
-    let canStart = true;
-    if(stageIndex > 0) {
-      const prevStage = job.stageExecutions[stageIndex - 1];
-      if(prevStage.stepExecutions.some(s => s.status !== 'completed')) {
-        canStart = false;
-
-        return;
-      }
-    }
     if (stepIndex > 0) {
       const prevStep = stage.stepExecutions[stepIndex - 1];
       if (prevStep.status !== 'completed' && step.status === 'pending') {
-        canStart = false;
-        
-        return;
+         return false;
       }
     }
+    if (stageIndex > 0) {
+      const prevStage = job.stageExecutions[stageIndex - 1];
+      if (prevStage.status !== 'completed') {
+        return false;
+      }
+    }
+    return true;
+  },
+  openStepExecution(stageIndex, stepIndex) {
+    const job = this.editingJob;
+    const stage = job.stageExecutions[stageIndex];
+    const canStart = this.validateSquentialSteps(job, stageIndex, stepIndex);
     const step = job.stageExecutions[stageIndex].stepExecutions[stepIndex];
-    
-    this.editingStep = { stageIndex, stepIndex, step };
+
+    this.editingStep = { stageIndex, stepIndex, step, canStart };
 
     document.getElementById('stepExecutionTitle').textContent = step.stepName;
     document.getElementById('stepDescription').textContent = step.description || 'No description';
@@ -850,7 +850,7 @@ const app = {
     // Buttons
     const btnStart = document.getElementById('btnStartStep');
     const btnComplete = document.getElementById('btnCompleteStep');
-    
+
     if (step.status === 'pending' && canStart) {
       btnStart.style.display = 'inline-block';
       btnComplete.style.display = 'none';
@@ -873,27 +873,15 @@ const app = {
   startStep() {
     const job = this.editingJob;
     const { stageIndex, stepIndex, step } = this.editingStep;
-    let canStart = true;
-    if(stageIndex > 0) {
-      const prevStage = job.stageExecutions[stageIndex - 1];
-      if(prevStage.stepExecutions.some(s => s.status !== 'completed')) {
-        canStart = false;
-        alert('Please complete the previous stage first.');
-        return;
-      }
-    }
-    if (stepIndex > 0) {
-      const prevStep = stage.stepExecutions[stepIndex - 1];
-      if (prevStep.status !== 'completed' && step.status === 'pending') {
-        canStart = false;
-        alert('Please complete the previous step first.');
-        return;
-      }
+    const canStart = this.validateSquentialSteps(job, stageIndex, stepIndex);
+    if (!canStart) {
+      alert('Cannot start this step before completing previous steps/stages.');
+      return;
     }
     step.status = 'in-progress';
     step.startedAt = Date.now();
     step.startedBy = this.currentUser.userId;
-    
+
     // Update job status if first step
     if (this.editingJob.status === 'pending') {
       this.editingJob.status = 'in-progress';
@@ -902,13 +890,13 @@ const app = {
     this.saveData();
     this.closeStepExecution();
     this.openJobDetail(this.editingJob.jobId);
-    
+
     alert('Step started!');
   },
 
   completeStep() {
     const { stageIndex, stepIndex, step } = this.editingStep;
-    
+
     // Get checklist data
     const checkboxes = document.querySelectorAll('#stepChecklistItems input[type="checkbox"]');
     checkboxes.forEach((checkbox, i) => {
@@ -946,14 +934,14 @@ const app = {
     this.saveData();
     this.closeStepExecution();
     this.openJobDetail(this.editingJob.jobId);
-    
+
     alert('Step completed!');
   },
 
   // Users
   loadUsers() {
     const usersList = document.getElementById('usersList');
-    
+
     usersList.innerHTML = this.data.users.map(user => `
       <div class="card">
         <div class="card-header">
@@ -1067,7 +1055,7 @@ const app = {
 
   resetToDefaults() {
     if (!confirm('Reset to default configuration?')) return;
-    
+
     this.config = this.getDefaultConfig();
     this.saveConfigToStorage();
     this.renderConfig();
