@@ -796,6 +796,7 @@ const app = {
 
   validateSquentialSteps(job, stageIndex, stepIndex) {
     const stage = job.stageExecutions[stageIndex];
+    const step = stage.stepExecutions[stepIndex];
     if (stepIndex > 0) {
       const prevStep = stage.stepExecutions[stepIndex - 1];
       if (prevStep.status !== 'completed' && step.status === 'pending') {
