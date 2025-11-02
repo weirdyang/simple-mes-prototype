@@ -906,7 +906,6 @@ const app = {
     const stage = job.stageExecutions[stageIndex];
     const canStart = this.checkIfStepCanStart(job, stageIndex, stepIndex);
     const step = job.stageExecutions[stageIndex].stepExecutions[stepIndex];
-    alert('Debug: canStart=' + canStart);
     this.editingStep = { stageIndex, stepIndex, step, canStart };
 
     document.getElementById('stepExecutionTitle').textContent = step.stepName;
