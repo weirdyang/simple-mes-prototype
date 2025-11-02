@@ -796,6 +796,7 @@ const app = {
 
   openStepExecution(stageIndex, stepIndex) {
     const job = this.editingJob;
+    const stage = job.stageExecutions[stageIndex];
     let canStart = true;
     if(stageIndex > 0) {
       const prevStage = job.stageExecutions[stageIndex - 1];
