@@ -116,12 +116,14 @@ const app = {
             stageId: 'stage_1',
             stageName: 'Preparation',
             order: 1,
+            dependencies: [], // First stage has no dependencies
             steps: [
               {
                 stepId: 'step_1',
                 stepName: 'Material Inspection',
                 description: 'Verify raw materials meet specifications',
                 order: 1,
+                dependencies: [],
                 requirements: ['Raw materials', 'Inspection tools'],
                 checklist: ['Material dimensions verified', 'No surface defects', 'Proper storage conditions']
               },
@@ -130,6 +132,7 @@ const app = {
                 stepName: 'Equipment Setup',
                 description: 'Prepare and calibrate equipment',
                 order: 2,
+                dependencies: ['step_1'], // Depends on previous step in same stage
                 requirements: ['Equipment manual', 'Calibration tools'],
                 checklist: ['Equipment cleaned', 'Calibration verified', 'Safety check completed']
               }
@@ -139,12 +142,14 @@ const app = {
             stageId: 'stage_2',
             stageName: 'Production',
             order: 2,
+            dependencies: ['stage_1'], // Depends on previous stage
             steps: [
               {
                 stepId: 'step_3',
                 stepName: 'Processing',
                 description: 'Execute main processing operation',
                 order: 1,
+                dependencies: [], // First step of stage has no step dependencies
                 requirements: ['Processed materials', 'Operating procedures'],
                 checklist: ['Process parameters set', 'Quality check during processing', 'Process completed']
               }
@@ -154,12 +159,14 @@ const app = {
             stageId: 'stage_3',
             stageName: 'Quality Control',
             order: 3,
+            dependencies: ['stage_2'], // Depends on previous stage
             steps: [
               {
                 stepId: 'step_4',
                 stepName: 'Final Inspection',
                 description: 'Final quality verification',
                 order: 1,
+                dependencies: [], // First step of stage has no step dependencies
                 requirements: ['Inspection checklist', 'Measuring tools'],
                 checklist: ['Dimensions within tolerance', 'Visual inspection passed', 'Documentation complete']
               }
@@ -420,13 +427,22 @@ const app = {
   },
 
   addStage() {
+    const stages = this.editingTemplate.stages;
+    
+    // Auto-generate dependency on previous stage
+    let dependencies = [];
+    if (stages.length > 0) {
+      dependencies = [stages[stages.length - 1].stageId];
+    }
+    
     const stage = {
       stageId: 'stage_' + Date.now(),
       stageName: 'New Stage',
-      order: this.editingTemplate.stages.length + 1,
+      order: stages.length + 1,
+      dependencies: dependencies,
       steps: []
     };
-    this.editingTemplate.stages.push(stage);
+    stages.push(stage);
     this.renderStages();
   },
 
@@ -440,15 +456,27 @@ const app = {
   },
 
   addStep(stageIndex) {
+    const stage = this.editingTemplate.stages[stageIndex];
+    const steps = stage.steps;
+    
+    // Auto-generate dependency on previous step in SAME stage only
+    let dependencies = [];
+    if (steps.length > 0) {
+      // Depend on the last step in this stage
+      dependencies = [steps[steps.length - 1].stepId];
+    }
+    // First step of stage has no step dependencies (stage dependency handles cross-stage)
+    
     const step = {
       stepId: 'step_' + Date.now(),
       stepName: 'New Step',
       description: '',
-      order: this.editingTemplate.stages[stageIndex].steps.length + 1,
+      order: steps.length + 1,
+      dependencies: dependencies,
       requirements: [],
       checklist: []
     };
-    this.editingTemplate.stages[stageIndex].steps.push(step);
+    steps.push(step);
     this.renderStages();
   },
 
@@ -714,11 +742,13 @@ const app = {
       stageExecutions: template.stages.map(stage => ({
         stageId: stage.stageId,
         stageName: stage.stageName,
+        dependencies: stage.dependencies || [], // Copy stage dependencies from template
         status: 'pending',
         stepExecutions: stage.steps.map(step => ({
           stepId: step.stepId,
           stepName: step.stepName,
           description: step.description,
+          dependencies: step.dependencies || [],
           requirements: [...step.requirements],
           checklist: step.checklist.map(item => ({ item, checked: false, notes: '' })),
           status: 'pending',
@@ -757,7 +787,7 @@ const app = {
     stagesList.innerHTML = job.stageExecutions.map((stage, stageIndex) => {
       const completedSteps = stage.stepExecutions.filter(s => s.status === 'completed').length;
       const totalSteps = stage.stepExecutions.length;
-      const canStartStage = stageIndex === 0 || job.stageExecutions[stageIndex - 1].status === 'completed';
+      
       return `
         <div class="job-stage">
           <div class="job-stage-header">
@@ -796,7 +826,41 @@ const app = {
     document.getElementById('jobDetailModal').classList.add('hidden');
   },
 
-  checkIfStepCanStart(job, stageIndex, stepIndex) {
+  findStepById(job, stepId) {
+    // Search all stages and steps for the given stepId
+    for (const stage of job.stageExecutions) {
+      for (const step of stage.stepExecutions) {
+        if (step.stepId === stepId) {
+          return step;
+        }
+      }
+    }
+    return null;
+  },
+
+  findStageById(job, stageId) {
+    // Search for stage by ID
+    for (const stage of job.stageExecutions) {
+      if (stage.stageId === stageId) {
+        return stage;
+      }
+    }
+    return null;
+  },
+
+  checkIfStageCanStart(job, stage) {
+    // Check if all stage dependencies are completed
+    if (stage.dependencies && stage.dependencies.length > 0) {
+      for (const depId of stage.dependencies) {
+        const depStage = this.findStageById(job, depId);
+        if (!depStage || depStage.status !== 'completed') {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
+  checkSequentialSteps (job, stageIndex, stepIndex) {
     const stage = job.stageExecutions[stageIndex];
     const step = stage.stepExecutions[stepIndex];
     if (stepIndex > 0) {
@@ -813,12 +877,36 @@ const app = {
     }
     return true;
   },
+  checkIfStepCanStart(job, stageIndex, stepIndex) {
+    const stage = job.stageExecutions[stageIndex];
+    const step = stage.stepExecutions[stepIndex];
+    if(stage.dependencies === undefined || stage.dependencies.length === 0){
+      return this.checkSquentialSteps(job, stageIndex, stepIndex);
+    }
+    // First check: Can the stage start? (Stage dependencies)
+    if (!this.checkIfStageCanStart(job, stage)) {
+      return false;
+    }
+    
+    // Then check: Can the step start? (Step dependencies within stage)
+    if (step.dependencies && step.dependencies.length > 0) {
+      for (const depId of step.dependencies) {
+        const depStep = this.findStepById(job, depId);
+        if (!depStep || depStep.status !== 'completed') {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  },
+
   openStepExecution(stageIndex, stepIndex) {
     const job = this.editingJob;
     const stage = job.stageExecutions[stageIndex];
     const canStart = this.checkIfStepCanStart(job, stageIndex, stepIndex);
     const step = job.stageExecutions[stageIndex].stepExecutions[stepIndex];
-
+    alert('Debug: canStart=' + canStart);
     this.editingStep = { stageIndex, stepIndex, step, canStart };
 
     document.getElementById('stepExecutionTitle').textContent = step.stepName;
@@ -878,7 +966,7 @@ const app = {
     const { stageIndex, stepIndex, step } = this.editingStep;
     const canStart = this.checkIfStepCanStart(job, stageIndex, stepIndex);
     if (!canStart) {
-      alert('Cannot start this step before completing previous steps/stages.');
+      alert('Cannot start this step. Please complete all required dependencies first.');
       return;
     }
     step.status = 'in-progress';
