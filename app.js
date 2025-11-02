@@ -195,7 +195,7 @@ const app = {
       return;
     }
 
-    const user = this.data.users.find(u => u.username === username);
+    const user = this.data.users.find(u => u.username.toUpperCase() === username.toUpperCase());
     if (user) {
       this.currentUser = user;
     } else {
