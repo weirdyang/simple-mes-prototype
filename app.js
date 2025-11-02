@@ -776,7 +776,9 @@ const app = {
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <span class="badge badge-${step.status}">${step.status}</span>
                   <button class="btn-primary" onclick="app.openStepExecution(${stageIndex}, ${stepIndex})">
-                    ${step.status === 'pending' || !canStartStage ? 'Start' : 'View'}
+                    ${this.checkIfStepCanStart(job, stageIndex, stepIndex) && step.status === 'pending' 
+                      ? 'Start'
+                      : 'View'}
                   </button>
                 </div>
               </div>
@@ -794,7 +796,7 @@ const app = {
     document.getElementById('jobDetailModal').classList.add('hidden');
   },
 
-  validateSquentialSteps(job, stageIndex, stepIndex) {
+  checkIfStepCanStart(job, stageIndex, stepIndex) {
     const stage = job.stageExecutions[stageIndex];
     const step = stage.stepExecutions[stepIndex];
     if (stepIndex > 0) {
@@ -814,7 +816,7 @@ const app = {
   openStepExecution(stageIndex, stepIndex) {
     const job = this.editingJob;
     const stage = job.stageExecutions[stageIndex];
-    const canStart = this.validateSquentialSteps(job, stageIndex, stepIndex);
+    const canStart = this.checkIfStepCanStart(job, stageIndex, stepIndex);
     const step = job.stageExecutions[stageIndex].stepExecutions[stepIndex];
 
     this.editingStep = { stageIndex, stepIndex, step, canStart };
@@ -874,7 +876,7 @@ const app = {
   startStep() {
     const job = this.editingJob;
     const { stageIndex, stepIndex, step } = this.editingStep;
-    const canStart = this.validateSquentialSteps(job, stageIndex, stepIndex);
+    const canStart = this.checkIfStepCanStart(job, stageIndex, stepIndex);
     if (!canStart) {
       alert('Cannot start this step before completing previous steps/stages.');
       return;
