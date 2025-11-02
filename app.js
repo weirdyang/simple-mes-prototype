@@ -796,6 +796,20 @@ const app = {
 
   openStepExecution(stageIndex, stepIndex) {
     const job = this.editingJob;
+    if(stageIndex > 0) {
+      const prevStage = job.stageExecutions[stageIndex - 1];
+      if(prevStage.stepExecutions.some(s => s.status !== 'completed')) {
+        alert('Please complete all steps in the previous stage first.');
+        return
+      }
+    }
+    if (stepIndex > 0) {
+      const prevStep = stage.stepExecutions[stepIndex - 1];
+      if (prevStep.status !== 'completed' && step.status === 'pending') {
+        alert('Please complete the previous step first.');
+        return;
+      }
+    }
     const step = job.stageExecutions[stageIndex].stepExecutions[stepIndex];
     
     this.editingStep = { stageIndex, stepIndex, step };
