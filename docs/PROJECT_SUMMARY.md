@@ -5,7 +5,7 @@
 ### Working Prototype (Phase 1)
 - **index.html** - Main application (11KB)
 - **styles.css** - Complete styling (11KB)
-- **app.js** - Full application logic (34KB)
+- **module js files** - see MODULAR_ARCITECTURE.MD
 - **README.md** - Technical documentation
 - **DEMO_GUIDE.md** - Quick demo walkthrough
 
@@ -27,6 +27,9 @@
    - Stages → Steps hierarchy
    - Requirements per step
    - Checklists for QA
+   - Parameters (immutable job configuration)
+   - Variables (mutable runtime state)
+   - Variable substitution with ${name} syntax
 
 3. **Job Management**
    - Create jobs from templates
@@ -51,6 +54,15 @@
    - Feature toggles
    - Adapts UI based on config
 
+7. **Parameters & Variables**
+   - Define parameters in templates
+   - Set parameter values at job creation
+   - Define variables in templates
+   - Update variable values during execution
+   - Variable substitution in step text (${name})
+   - Conditional stage execution (succeeded/failed/always)
+   - Template import from JSON files
+
 ### Data Persistence
 - Browser localStorage
 - JSON format
@@ -66,8 +78,8 @@
 
 ### Data Models
 - **User**: Authentication and authorization
-- **Template**: Reusable job definitions
-- **Job**: Executable instances with stage/step executions
+- **Template**: Reusable job definitions with parameters and variables
+- **Job**: Executable instances with parameter values and variable state
 - **Config**: System configuration and features
 
 ### Scalability
@@ -110,10 +122,13 @@ See **DEMO_GUIDE.md** for detailed walkthrough.
 - [ ] Conditional steps (run on success/failure/always)
 - [ ] Step dependencies with visualization
 
-### Dynamic Forms
-- [ ] Custom job fields per template
-- [ ] Dynamic QA form builder
-- [ ] Field validation rules
+### Enhanced Parameters & Variables
+- [ ] Type validation (number, string, boolean, date, object)
+- [ ] Rich input controls (dropdowns, date pickers, file uploads)
+- [ ] Complex conditional expressions (AND/OR/NOT logic)
+- [ ] Variable scoping (stage-level vs job-level)
+- [ ] Array/object variable types
+- [ ] Computed variables (formulas)
 
 ### Enhanced Requirements
 - [ ] Typed requirements (Material/Qualification/Tool/User)
@@ -181,11 +196,11 @@ See **DEMO_GUIDE.md** for detailed walkthrough.
 
 ## 📊 Metrics
 
-- **Code Size**: ~58KB total (uncompressed)
+- **Code Size**: ~65KB total (uncompressed, with parameters/variables)
 - **Files**: 3 core files + docs
-- **Lines of Code**: ~2000 LOC
-- **Features**: 15+ working features
-- **Time to Build**: ~2 hours (from architecture to prototype)
+- **Lines of Code**: ~2200 LOC
+- **Features**: 20+ working features
+- **Time to Build**: ~3 hours (from architecture to prototype with parameters/variables)
 
 ## 🎓 What We Learned
 

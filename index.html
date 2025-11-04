@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Management System</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
   <!-- Login Screen -->
   <div id="loginScreen" class="screen">
@@ -27,48 +29,44 @@
   </div>
 
   <!-- Main Application -->
-  <div id="appScreen" class="screen hidden">
+  <div id="appContainer" class="screen hidden">
     <!-- Header -->
     <header class="app-header">
       <div class="header-left">
         <h1>Job Management System</h1>
       </div>
       <div class="header-right">
-        <span id="currentUser"></span>
+        <span id="currentUserName"></span> (<span id="currentUserRole"></span>)
         <button onclick="app.logout()">Logout</button>
       </div>
     </header>
 
     <!-- Navigation -->
     <nav class="app-nav">
-      <button class="nav-btn active" data-view="dashboard" onclick="app.showView('dashboard')">Dashboard</button>
-      <button class="nav-btn" data-view="templates" onclick="app.showView('templates')">Templates</button>
-      <button class="nav-btn" data-view="jobs" onclick="app.showView('jobs')">Jobs</button>
-      <button class="nav-btn" data-view="users" onclick="app.showView('users')">Users</button>
-      <button class="nav-btn" data-view="config" onclick="app.showView('config')">Config</button>
+      <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+      <button class="nav-btn" data-view="templates">Templates</button>
+      <button class="nav-btn" data-view="jobs">Jobs</button>
+      <button class="nav-btn" data-view="users">Users</button>
+      <button class="nav-btn" data-view="config">Config</button>
     </nav>
 
     <!-- Main Content -->
     <main class="app-content">
       <!-- Dashboard View -->
-      <div id="dashboardView" class="view active">
+      <div id="dashboardView" class="view-content">
         <h2>Dashboard</h2>
         <div class="dashboard-stats">
           <div class="stat-card">
-            <h3 id="statTotalJobs">0</h3>
+            <h3 id="totalJobs">0</h3>
             <p>Total Jobs</p>
           </div>
           <div class="stat-card">
-            <h3 id="statActiveJobs">0</h3>
+            <h3 id="activeJobs">0</h3>
             <p>Active Jobs</p>
           </div>
           <div class="stat-card">
-            <h3 id="statMyJobs">0</h3>
-            <p>My Jobs</p>
-          </div>
-          <div class="stat-card">
-            <h3 id="statTemplates">0</h3>
-            <p>Templates</p>
+            <h3 id="completedJobs">0</h3>
+            <p>Completed Jobs</p>
           </div>
         </div>
         <div class="dashboard-content">
@@ -76,64 +74,39 @@
             <h3>My Assigned Jobs</h3>
             <div id="myJobsList"></div>
           </div>
-          <div class="dashboard-section">
-            <h3>Recent Activity</h3>
-            <div id="recentActivity"></div>
-          </div>
         </div>
       </div>
 
       <!-- Templates View -->
-      <div id="templatesView" class="view">
+      <div id="templatesView" class="view-content hidden">
         <div class="view-header">
           <h2>Templates</h2>
-          <button class="btn-primary" onclick="app.showTemplateBuilder()">+ Create Template</button>
+          <div>
+            <!-- UPDATED: Added Import Template button -->
+            <button class="btn-secondary" onclick="app.importTemplate()" style="margin-right: 10px;">📥 Import
+              Template</button>
+            <button class="btn-primary" onclick="app.showTemplateBuilder()">+ Create Template</button>
+          </div>
         </div>
         <div id="templatesList"></div>
       </div>
 
-      <!-- Template Builder Modal -->
-      <div id="templateBuilderModal" class="modal hidden">
-        <div class="modal-content large">
-          <div class="modal-header">
-            <h2 id="templateBuilderTitle">Create Template</h2>
-            <button class="modal-close" onclick="app.closeTemplateBuilder()">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Template Name *</label>
-              <input type="text" id="templateName" placeholder="e.g., Standard Welding Job">
-            </div>
-            <div class="form-group">
-              <label>Description</label>
-              <textarea id="templateDescription" placeholder="Template description..."></textarea>
-            </div>
-            
-            <h3>Stages</h3>
-            <div id="stagesList"></div>
-            <button class="btn-secondary" onclick="app.addStage()">+ Add Stage</button>
-          </div>
-          <div class="modal-footer">
-            <button class="btn-secondary" onclick="app.closeTemplateBuilder()">Cancel</button>
-            <button class="btn-primary" onclick="app.saveTemplate()">Save Template</button>
-          </div>
-        </div>
-      </div>
+
 
       <!-- Jobs View -->
-      <div id="jobsView" class="view">
+      <div id="jobsView" class="view-content hidden">
         <div class="view-header">
           <h2>Jobs</h2>
           <button class="btn-primary" onclick="app.showJobCreator()">+ Create Job</button>
         </div>
         <div class="jobs-filters">
-          <select id="jobStatusFilter" onchange="app.filterJobs()">
+          <select id="jobStatusFilter" onchange="uiManager.renderJobs()">
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
-          <input type="text" id="jobSearchInput" placeholder="Search jobs..." oninput="app.filterJobs()">
+          <input type="text" id="jobSearchInput" placeholder="Search jobs..." oninput="uiManager.renderJobs()">
         </div>
         <div id="jobsList"></div>
       </div>
@@ -174,6 +147,9 @@
                 <option value="">-- Unassigned --</option>
               </select>
             </div>
+
+            <!-- UPDATED: Added parameter input section -->
+            <div id="jobParametersSection"></div>
           </div>
           <div class="modal-footer">
             <button class="btn-secondary" onclick="app.closeJobCreator()">Cancel</button>
@@ -181,7 +157,44 @@
           </div>
         </div>
       </div>
+      <!-- Template builder modal-->
+      <div id="templateBuilderModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 1200px; max-height: 90vh; overflow-y: auto;">
+          <div class="modal-header">
+            <h2 id="templateBuilderTitle">Create Template</h2>
+            <button class="modal-close" onclick="templateBuilderUI.close()">&times;</button>
+          </div>
 
+          <div class="modal-body">
+            <!-- Basic Info -->
+            <div class="form-section">
+              <h3>Basic Information</h3>
+              <div class="form-group">
+                <label for="templateName">Template Name *</label>
+                <input type="text" id="templateName" placeholder="e.g., Precision Welding Job" />
+              </div>
+              <div class="form-group">
+                <label for="templateDescription">Description</label>
+                <textarea id="templateDescription" rows="3" placeholder="Describe this template..."></textarea>
+              </div>
+            </div>
+
+            <!-- Parameters Section -->
+            <div id="parametersContainer"></div>
+
+            <!-- Variables Section -->
+            <div id="variablesContainer"></div>
+
+            <!-- Stages Section -->
+            <div id="stagesContainer"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn-secondary" onclick="templateBuilderUI.close()">Cancel</button>
+            <button class="btn-primary" onclick="templateBuilderUI.save()">Save Template</button>
+          </div>
+        </div>
+      </div>
       <!-- Job Detail Modal -->
       <div id="jobDetailModal" class="modal hidden">
         <div class="modal-content large">
@@ -197,6 +210,10 @@
               <div><strong>Status:</strong> <span id="jobDetailStatus" class="badge"></span></div>
               <div><strong>Assigned To:</strong> <span id="jobDetailAssignedTo"></span></div>
             </div>
+
+            <!-- UPDATED: Added parameters/variables display section -->
+            <div id="jobParametersDisplay"></div>
+
             <div class="job-stages" id="jobStagesList"></div>
           </div>
         </div>
@@ -216,29 +233,33 @@
                 <strong>Status:</strong> <span id="stepCurrentStatus" class="badge"></span>
               </div>
             </div>
-            
+
             <div class="step-requirements" id="stepRequirements"></div>
-            
+
             <div class="step-checklist">
               <h3>Checklist</h3>
               <div id="stepChecklistItems"></div>
             </div>
-            
+
             <div class="form-group">
               <label>Notes</label>
               <textarea id="stepNotes" placeholder="Add notes about this step..."></textarea>
             </div>
+
+            <!-- UPDATED: Added variables update section -->
+            <div id="stepVariablesSection" style="margin-top: 20px;"></div>
           </div>
           <div class="modal-footer">
             <button class="btn-secondary" onclick="app.closeStepExecution()">Cancel</button>
             <button class="btn-warning" id="btnStartStep" onclick="app.startStep()">Start Step</button>
-            <button class="btn-primary" id="btnCompleteStep" onclick="app.completeStep()" style="display:none;">Complete Step</button>
+            <button class="btn-primary" id="btnCompleteStep" onclick="app.completeStep()" style="display:none;">Complete
+              Step</button>
           </div>
         </div>
       </div>
 
       <!-- Users View -->
-      <div id="usersView" class="view">
+      <div id="usersView" class="view-content hidden">
         <div class="view-header">
           <h2>Users</h2>
           <button class="btn-primary" onclick="app.showUserCreator()">+ Add User</button>
@@ -247,7 +268,7 @@
       </div>
 
       <!-- Config View -->
-      <div id="configView" class="view">
+      <div id="configView" class="view-content hidden">
         <h2>System Configuration</h2>
         <div class="config-section">
           <h3>Industry Preset</h3>
@@ -258,12 +279,12 @@
           </select>
           <button class="btn-secondary" onclick="app.applyPreset()">Apply Preset</button>
         </div>
-        
+
         <div class="config-section">
           <h3>Features</h3>
           <div class="config-features" id="configFeatures"></div>
         </div>
-        
+
         <div class="config-section">
           <button class="btn-primary" onclick="app.saveConfig()">Save Configuration</button>
           <button class="btn-secondary" onclick="app.resetToDefaults()">Reset to Defaults</button>
@@ -272,6 +293,16 @@
     </main>
   </div>
 
-  <script src="app.js"></script>
+  <!-- UPDATED: Load modular JavaScript files in dependency order -->
+  <script src="js/utils.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/jobs.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/template-builder-implementation.js"></script>
+  <script src="js/app.js"></script>
 </body>
+
 </html>

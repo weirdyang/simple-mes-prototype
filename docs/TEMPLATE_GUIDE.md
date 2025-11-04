@@ -32,7 +32,8 @@ General product assembly for small businesses, startups, or non-regulated indust
 - ✅ Text requirements (simple list)
 - ❌ No dependencies
 - ❌ No conditions
-- ❌ No custom fields
+- ❌ No parameters
+- ❌ No variables
 - ❌ No typed requirements
 
 ### Process Flow
@@ -57,6 +58,7 @@ Gather Parts → Assemble → Inspect → Done
 ### What's Missing
 - No parallel execution
 - No conditional logic
+- No parameters or variables
 - No variable substitution
 - No certification tracking
 - No complex validations
@@ -72,9 +74,10 @@ Regulated manufacturing requiring certifications, parallel workflows, and full t
 - ✅ Parallel execution (multiple steps simultaneously)
 - ✅ Dependencies (step X waits for Y)
 - ✅ Conditions (run only if succeeded/failed/always)
-- ✅ Custom fields (plateQuantity, weldingType, etc.)
+- ✅ Parameters (immutable: plateQuantity, weldingType, clientPO)
+- ✅ Variables (mutable: temperature, defectCount, passedInspection)
+- ✅ Variable substitution (${parameterName}, ${variableName})
 - ✅ Typed requirements (Material, Tool, Qualification, User, Approval, Document)
-- ✅ Variable substitution (${fieldName})
 - ✅ Dynamic QA templates
 - ✅ Certification validation
 - ✅ Tool calibration tracking
@@ -115,16 +118,59 @@ Equipment Setup ╱                              ↓
 
 ### Advanced Features Explained
 
+#### 0. **Parameters vs Variables**
+
+**Parameters (Immutable Configuration):**
+- Set once at job creation
+- Examples: `plateQuantity=15`, `weldingType="MIG"`, `clientPO="ABC-001"`
+- Used for: Job-specific configuration that doesn't change
+- Syntax: `${plateQuantity}` in step text
+
+**Variables (Mutable Runtime State):**
+- Updated during step execution
+- Examples: `temperature=245`, `defectCount=2`, `passedInspection=true`
+- Used for: Data that flows through pipeline stages
+- Syntax: `${temperature}` in step text
+
+**Example:**
+```json
+Template defines:
+  "parameters": [
+    {"parameterId": "plateQuantity", "label": "Plates", "defaultValue": 10}
+  ],
+  "variables": [
+    {"variableId": "temperature", "label": "Temp (°C)", "defaultValue": 0}
+  ]
+
+Job creation: User enters plateQuantity = 15
+Step execution: Operator records temperature = 245
+Step text: "Weld ${plateQuantity} plates at ${temperature}°C"
+Rendered: "Weld 15 plates at 245°C"
+```
+
 #### 1. **Parallel Execution**
 Material check and equipment setup run simultaneously instead of sequentially, saving 30-45 minutes per job.
 
-#### 2. **Variable Substitution**
-Template uses `${plateQuantity}` which gets replaced with actual value:
-- Template: "Inspect ${plateQuantity} plates"
-- Job with 15 plates: "Inspect 15 plates"
-- Job with 50 plates: "Inspect 50 plates"
+#### 2. **Variable Substitution (Parameters & Variables)**
+Template uses `${parameterName}` and `${variableName}` which get replaced with actual values:
 
-#### 3. **Conditional Stages**
+**Parameter substitution (set at creation):**
+- Template: "Inspect ${plateQuantity} plates"
+- Job with `plateQuantity=15`: "Inspect 15 plates"
+- Job with `plateQuantity=50`: "Inspect 50 plates"
+
+**Variable substitution (updated during execution):**
+- Template: "Temperature recorded: ${temperature}°C"
+- After step 1: "Temperature recorded: 245°C"
+- After step 2: "Temperature recorded: 267°C"
+
+**Combined usage:**
+- Template: "Weld ${plateQuantity} plates using ${weldingType} at ${temperature}°C"
+- Rendered: "Weld 15 plates using MIG at 245°C"
+  - `plateQuantity` and `weldingType` are parameters (set at job creation)
+  - `temperature` is a variable (updated during execution)
+
+#### 4. **Conditional Stages**
 Rework stage only runs if QA fails:
 ```javascript
 "condition": "failed()"  // Only execute if previous stage failed
@@ -135,7 +181,7 @@ Cleanup always runs regardless:
 "condition": "always()"  // Execute no matter what
 ```
 
-#### 4. **Typed Requirements**
+#### 5. **Typed Requirements**
 Instead of text "Need welder cert":
 ```json
 {
@@ -149,7 +195,7 @@ System automatically:
 - Validates expiration date
 - Blocks step if not qualified
 
-#### 5. **Output Tracking**
+#### 6. **Output Tracking**
 Welding step produces:
 - Physical artifact (welded assembly)
 - Temperature data (for analysis)
@@ -171,9 +217,10 @@ Month 1-2: Use simple templates
 
 ### Add Complexity Gradually
 ```
-Month 3: Add custom fields
-- Job-specific parameters
-- Variable substitution
+Month 3: Add parameters and variables
+- Job-specific parameters (immutable config)
+- Runtime variables (mutable state)
+- Variable substitution for dynamic content
 
 Month 4: Add dependencies
 - Parallel execution

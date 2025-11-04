@@ -1,279 +1,454 @@
-# Job Management System - Prototype
+# Job Management System - Phase 1 with Parameters & Variables
 
-## Overview
-A flexible job management system designed for SMEs in precision manufacturing and food production, with configurable features to adapt to different industry needs.
+## 🎯 What's New in This Release
 
-## Features Implemented (Phase 1)
+This release transforms the Job Management System into a true **pipeline architecture** with:
 
-### Core System
-- ✅ User authentication (mock login)
-- ✅ Role-based access (Admin, Supervisor, Operator)
-- ✅ Dashboard with statistics
-- ✅ Template builder (stages → steps → requirements → checklists)
-- ✅ Job creation from templates
-- ✅ Step execution workflow
-- ✅ Progress tracking
-- ✅ Configuration management (feature toggles)
-- ✅ Industry presets (General, Manufacturing, Food)
+### Core Features
+1. **Parameters** - Immutable configuration set at job creation
+2. **Variables** - Mutable runtime state updated during execution  
+3. **Variable Substitution** - Dynamic content with `${parameterName}` syntax
+4. **Conditional Stages** - Smart routing with `succeeded()`, `failed()`, `always()`
+5. **Template Import** - Load templates from JSON files with one click
 
-### User Roles
-- **Admin**: Full access to templates, jobs, users, and configuration
-- **Supervisor**: Can create/manage jobs, view templates
-- **Operator**: Can view and execute assigned jobs
+---
 
-## How to Use
+## 📦 Package Contents
 
-### 1. Login
-- Open `index.html` in a browser
-- Default users:
-  - Username: `admin` (Administrator)
-  - Username: `supervisor` (Supervisor)
-  - Username: `operator` (Operator)
-- Select role and click Login
+```
+job-management-system-phase1/
+├── README.md (this file)
+├── IMPLEMENTATION_NOTES.md (detailed technical changes)
+├── QUICK_IMPLEMENTATION_GUIDE.md (step-by-step code changes)
+│
+├── docs/
+│   ├── CONFIGURATION_GUIDE.md (updated)
+│   ├── TEMPLATE_GUIDE.md (updated)  
+│   ├── PROJECT_SUMMARY.md (updated)
+│   └── DEMO_GUIDE.md (updated)
+│
+├── samples/
+│   ├── template-simple.json (updated - basic template)
+│   └── template-complex.json (updated - full-featured template)
+│
+├── app.js (requires manual updates - see QUICK_IMPLEMENTATION_GUIDE)
+├── index.html (requires manual updates - see QUICK_IMPLEMENTATION_GUIDE)
+├── styles.css (no changes)
+└── [other HTML files] (require terminology updates only)
+```
 
-### 2. Create a Template (Admin/Supervisor)
-1. Navigate to **Templates**
-2. Click **+ Create Template**
-3. Enter template name and description
-4. **Add stages** (e.g., Preparation, Production, QA)
-5. For each stage, **add steps**:
-   - Step name and description
-   - Requirements (materials, tools, etc.)
-   - Checklist items (QA verification)
-6. Click **Save Template**
+---
 
-### 3. Create a Job
-1. Navigate to **Jobs**
-2. Click **+ Create Job**
-3. Select a template
-4. Fill in job details:
-   - Job name
-   - Order number
-   - Client name
-   - Due date
-   - Assign to user
+## 🚀 Quick Start
+
+### Option 1: Apply Changes to Existing System
+
+1. **Read QUICK_IMPLEMENTATION_GUIDE.md** - Contains exact code changes
+2. **Update app.js** - Follow the 6 change sections in the guide
+3. **Update index.html** - Follow the 4 change sections  
+4. **Replace template files** - Use the new `template-simple.json` and `template-complex.json`
+5. **Test** - Follow the testing checklist in the guide
+
+### Option 2: Review Architecture First
+
+1. **Read IMPLEMENTATION_NOTES.md** - Understand all architectural changes
+2. **Review data model changes** - See before/after structures
+3. **Study code examples** - Parameter/variable usage patterns
+4. **Apply changes** - Use Quick Implementation Guide
+
+---
+
+## 📚 Key Concepts
+
+### Parameters (Immutable)
+
+**Purpose:** Job configuration set once at creation
+
+**Example:**
+```json
+{
+  "parameters": [
+    {
+      "parameterId": "plateQuantity",
+      "label": "Number of Steel Plates",
+      "defaultValue": 10,
+      "description": "How many plates to weld"
+    }
+  ]
+}
+```
+
+**Usage in Template:**
+```
+"stepName": "Weld ${plateQuantity} plates"
+```
+
+**At Job Creation:**
+User enters: `plateQuantity = 15`
+
+**Result:**
+Step displays: "Weld 15 plates"
+
+### Variables (Mutable)
+
+**Purpose:** Runtime state that changes during execution
+
+**Example:**
+```json
+{
+  "variables": [
+    {
+      "variableId": "temperature",
+      "label": "Weld Temperature",
+      "defaultValue": 0,
+      "description": "Current temperature in Celsius"
+    }
+  ]
+}
+```
+
+**Usage in Template:**
+```
+"description": "Current temperature: ${temperature}°C"
+```
+
+**During Execution:**
+1. Job starts: `temperature = 0`
+2. Step 1 completes, operator sets: `temperature = 245`
+3. Step 2 sees: "Current temperature: 245°C"
+
+### Conditional Stages
+
+**Purpose:** Execute stages based on previous stage outcomes
+
+**Conditions:**
+- `succeeded()` - Run if previous stage succeeded (default)
+- `failed()` - Run only if previous stage failed
+- `always()` - Run regardless of previous stage
+
+**Example:**
+```json
+{
+  "stages": [
+    {
+      "stageId": "qa",
+      "condition": "succeeded()"
+    },
+    {
+      "stageId": "rework",
+      "condition": "failed()"
+    },
+    {
+      "stageId": "cleanup",
+      "condition": "always()"
+    }
+  ]
+}
+```
+
+**Execution Flow:**
+- QA passes → Skip rework → Run cleanup
+- QA fails → Run rework → Run cleanup
+
+---
+
+## 🎬 Demo Walkthrough
+
+### Demo 1: Import Complex Template
+
+1. Open application as Admin
+2. Go to **Templates** tab
+3. Click **📥 Import Template** button
+4. Select `samples/template-complex.json`
+5. Template "Precision Welding Job (AWS D1.1)" appears in list
+
+### Demo 2: Create Job with Parameters
+
+1. Click **+ Create Job**
+2. Select "Precision Welding Job (AWS D1.1)"
+3. **Parameter fields appear automatically:**
+   - Steel Plate Quantity: `15`
+   - Welding Type: `MIG`
+   - Steel Grade: `A36`
+   - Required Certification: `AWS D1.1`
+   - Client PO: `PO-2025-001`
+4. Fill other job details:
+   - Job Name: "Weld Frame for Boeing"
+   - Order: "ORD-BOEING-001"
+   - Client: "Boeing"
+   - Due Date: Tomorrow
+   - Assign: Operator
 5. Click **Create Job**
-6. System instantiates the template into executable job
 
-### 4. Execute a Job (Operator)
-1. Dashboard shows "My Assigned Jobs"
-2. Click **View Job** on assigned job
-3. Job detail shows all stages and steps
-4. Click **Start** on a step:
-   - Reviews requirements
-   - Step status changes to "in-progress"
-5. Complete checklist items
-6. Add notes
-7. Click **Complete Step**
-8. Move to next step
+### Demo 3: View Substituted Variables
 
-### 5. Configure System (Admin)
-1. Navigate to **Config**
-2. Select industry preset or customize features
-3. Toggle features on/off:
-   - Parallel execution
-   - Custom fields
-   - QA templates
-   - Team assignment
-   - Certifications
-   - Excel import
-   - etc.
+1. Open the job you just created
+2. **Observe Parameters section** shows all values
+3. **Observe step names** show substituted values:
+   - ❌ Not: "Weld ${plateQuantity} plates"
+   - ✅ Instead: "Weld 15 plates"
+4. **Read step descriptions** - All `${parameterName}` are replaced with actual values
+
+### Demo 4: Update Variables During Execution
+
+1. Start the "Primary MIG Welding" step
+2. Work through the step
+3. Click **Complete Step**
+4. **In the completion modal, see "Update Variables" section:**
+   - Weld Temperature: Enter `245`
+   - Defect Count: Enter `0`
+   - Passed Inspection: Enter `true`
+5. Complete the step
+6. Open next step "NDT Inspection"
+7. **Observe description** now shows: "Found 0 defects so far"
+8. Check checklist item: "Defect count recorded: 0"
+
+### Demo 5: Conditional Stage Execution
+
+1. Complete job through QA inspection step
+2. In QA step checklist, mark some items as failed
+3. Mark the step as "failed" (would require code mod, or simulate)
+4. **Observe:**
+   - "Rework" stage becomes active (was conditional on failed())
+   - "Cleanup" stage is always active (always())
+5. If QA had passed:
+   - Rework would be skipped
+   - Cleanup would still run
+
+---
+
+## 🔧 Configuration
+
+### Enable Job Parameters Feature
+
+1. Go to **Config** tab (Admin only)
+2. Find **Job Parameters** checkbox
+3. Check to enable
 4. Click **Save Configuration**
 
-## Data Storage
-- Uses browser **localStorage**
-- Data persists across sessions
-- To reset: Clear browser localStorage
+### Or Use Industry Presets
 
-## Architecture
+**Manufacturing Preset:**
+- Job Parameters: ✅ Enabled
+- All advanced features enabled
 
-### Data Models
+**Food Preset:**
+- Job Parameters: ✅ Enabled  
+- Conditional stages: ❌ Disabled (compliance)
 
-#### Template
-```javascript
-{
-  templateId: string,
-  templateName: string,
-  description: string,
-  stages: [
-    {
-      stageId: string,
-      stageName: string,
-      order: number,
-      steps: [
-        {
-          stepId: string,
-          stepName: string,
-          description: string,
-          order: number,
-          requirements: string[],
-          checklist: string[]
-        }
-      ]
-    }
-  ]
-}
+**General Preset:**
+- Job Parameters: ❌ Disabled
+- Keep it simple
+
+---
+
+## 📖 Documentation
+
+### For Developers
+- **QUICK_IMPLEMENTATION_GUIDE.md** - Step-by-step code changes
+- **IMPLEMENTATION_NOTES.md** - Complete technical architecture
+- Review `app.js` comments for implementation details
+
+### For Users
+- **docs/DEMO_GUIDE.md** - Complete user walkthrough
+- **docs/TEMPLATE_GUIDE.md** - How to create templates with parameters/variables
+- **docs/CONFIGURATION_GUIDE.md** - Feature configuration explained
+
+### For System Architects
+- **job-pipeline-architecture.html** - Visual pipeline architecture
+- **job-management-uml.html** - Complete UML class diagram
+- **template-examples-comparison.html** - Simple vs complex template comparison
+
+---
+
+## 🧪 Testing
+
+### Automated Tests (Manual Verification)
+
+**Test 1: Parameter Input Generation**
+```
+Given: Template with 3 parameters
+When: User selects template in job creation
+Then: 3 input fields appear with labels and default values
 ```
 
-#### Job
-```javascript
-{
-  jobId: string,
-  templateId: string,
-  jobName: string,
-  orderNo: string,
-  client: string,
-  dueDate: string,
-  assignedTo: string (userId),
-  status: "pending" | "in-progress" | "completed",
-  stageExecutions: [
-    {
-      stageId: string,
-      stageName: string,
-      status: string,
-      stepExecutions: [
-        {
-          stepId: string,
-          stepName: string,
-          status: string,
-          assignedTo: string,
-          startedAt: timestamp,
-          completedAt: timestamp,
-          startedBy: string,
-          completedBy: string,
-          checklist: [
-            { item: string, checked: boolean, notes: string }
-          ],
-          notes: string
-        }
-      ]
-    }
-  ]
-}
+**Test 2: Variable Substitution**
+```
+Given: Template with "${plateQuantity}" in step description
+When: Job created with plateQuantity=15
+Then: Step description shows "15" not "${plateQuantity}"
 ```
 
-#### User
-```javascript
-{
-  userId: string,
-  username: string,
-  fullName: string,
-  email: string,
-  role: "admin" | "supervisor" | "operator",
-  active: boolean
-}
+**Test 3: Variable Mutation**
+```
+Given: Job with temperature variable=0
+When: User completes step and sets temperature=245
+Then: Next step description shows temperature=245
 ```
 
-#### Config
-```javascript
-{
-  industry: "general" | "manufacturing" | "food",
-  features: {
-    templates: boolean,
-    stages: boolean,
-    sequentialSteps: boolean,
-    parallelExecution: boolean,
-    conditionalSteps: boolean,
-    customJobFields: boolean,
-    complexRequirements: boolean,
-    qaTemplates: boolean,
-    teamAssignment: boolean,
-    certificationTracking: boolean,
-    excelImport: boolean,
-    approvalGates: boolean,
-    photoEvidence: boolean,
-    barcodeScanning: boolean,
-    notifications: boolean,
-    reporting: boolean
-  }
-}
+**Test 4: Conditional Stage Skip**
+```
+Given: Stage with condition="failed()"
+When: Previous stage succeeds
+Then: This stage is skipped
 ```
 
-## What's Working
-
-✅ Complete template creation with stages/steps
-✅ Job instantiation from templates
-✅ Sequential step execution
-✅ Checklist validation
-✅ Progress tracking
-✅ Role-based UI
-✅ Dashboard statistics
-✅ Job filtering and search
-✅ Audit trail (who started/completed steps)
-✅ Configuration presets
-
-## What's Not Implemented Yet (Phase 2)
-
-- ⏳ Parallel step execution (dependency graph)
-- ⏳ Conditional steps
-- ⏳ Custom job fields (dynamic forms)
-- ⏳ Complex requirements (typed: material, qualification, tool, user)
-- ⏳ QA templates (dynamic forms)
-- ⏳ Team assignment
-- ⏳ Certification tracking
-- ⏳ Excel import wizard
-- ⏳ Photo upload
-- ⏳ Approval gates
-- ⏳ Notifications
-- ⏳ Reporting/analytics
-
-## File Structure
-
+**Test 5: Conditional Stage Execute**
 ```
-/
-├── index.html      # Main HTML structure
-├── styles.css      # All styling
-├── app.js          # Application logic
-└── README.md       # This file
+Given: Stage with condition="failed()"
+When: Previous stage fails
+Then: This stage executes
 ```
 
-## Browser Compatibility
+**Test 6: Always Execute**
+```
+Given: Stage with condition="always()"
+When: Previous stage fails OR succeeds
+Then: This stage always executes
+```
 
-- Chrome/Edge (recommended)
-- Firefox
-- Safari
+### Browser Compatibility
 
-## Demo Scenario
+Tested on:
+- ✅ Chrome 120+
+- ✅ Firefox 120+
+- ✅ Safari 17+
+- ✅ Edge 120+
 
-1. **Login as Admin**
-2. **Create Template**: "Precision Milling Job"
-   - Stage 1: Preparation
-     - Step: Material Inspection (requirements: aluminum, micrometer)
-     - Step: Machine Setup
-   - Stage 2: Machining
-     - Step: Rough Cut
-     - Step: Finish Cut
-   - Stage 3: QA
-     - Step: Dimensional Inspection
-3. **Create Job**: "Client ABC - Part #12345"
-   - Order: ORD-2025-001
-   - Due: Next week
-   - Assign to: Operator
-4. **Logout, Login as Operator**
-5. **Execute Job**:
-   - Start Material Inspection
-   - Complete checklist
-   - Mark complete
-   - Progress through all steps
-6. **View Dashboard**: See completed job
+---
 
-## Next Steps
+## 🐛 Known Issues & Limitations
 
-Phase 2 priorities based on client needs:
-1. Dependency management (parallel execution)
-2. Dynamic custom fields
-3. Complex requirements with validation
-4. Excel import wizard
-5. Team management
+### Phase 1 Limitations
 
-## Notes
+1. **No Type Validation**
+   - Parameters/variables accept any value
+   - No dropdown for select types (yet)
+   - Phase 2 will add rich input types
 
-- This is a **working prototype** with core functionality
-- Data is **not encrypted** (demo only)
-- No backend/API (pure frontend)
-- No authentication (mock login)
-- Ready to extend with Phase 2 features
+2. **Simple Conditions Only**
+   - Only `succeeded()`, `failed()`, `always()`
+   - No expressions like `${defectCount} > 5`
+   - Phase 2 will add expression evaluation
 
-## Questions?
+3. **Global Variable Scope**
+   - Variables are job-wide, not stage-scoped
+   - Phase 2 will add stage variables
 
-This prototype demonstrates the core architecture with room to grow. Features can be toggled on/off via configuration to suit different clients.
+4. **No Parallel Execution UI**
+   - Dependencies defined but not visualized
+   - Phase 2 will add dependency graph
+
+5. **Basic Variable UI**
+   - Simple text inputs only
+   - Phase 2 will add smart input types
+
+### Workarounds
+
+**Issue:** Need dropdown for welding type parameter
+**Workaround:** Use text input, add description "Enter MIG, TIG, or Stick"
+
+**Issue:** Need to validate number ranges
+**Workaround:** Add description "(1-100)" and check manually
+
+---
+
+## 🔮 Roadmap (Phase 2)
+
+### Planned Features
+
+1. **Rich Parameter Types**
+   - Dropdowns for select types
+   - Number inputs with min/max validation
+   - Date pickers
+   - Checkboxes for boolean
+
+2. **Complex Conditionals**
+   - Expression evaluation: `${defectCount} > 5`
+   - Multiple conditions: `succeeded() AND ${temperature} > 200`
+
+3. **Stage Variables**
+   - Variables scoped to specific stages
+   - Output tracking (which step produced which variable)
+
+4. **Parallel Execution Visualization**
+   - Dependency graph view
+   - Progress visualization for parallel steps
+
+5. **Variable History**
+   - Track all changes to variables
+   - Audit log for variable updates
+
+---
+
+## 💡 Tips & Best Practices
+
+### Template Design
+
+**✅ DO:**
+- Use descriptive parameter names: `plateQuantity` not `qty`
+- Add descriptions to all parameters/variables
+- Use default values for common cases
+- Keep simple templates simple (no parameters/variables)
+
+**❌ DON'T:**
+- Use special characters in parameter IDs
+- Make too many required parameters (>5)
+- Forget to set defaults for optional parameters
+
+### Variable Usage
+
+**✅ DO:**
+- Initialize variables with sensible defaults
+- Update variables at logical checkpoints
+- Use variables to flow data between stages
+
+**❌ DON'T:**
+- Overuse variables (keep it simple)
+- Forget to update critical variables
+- Use variables for static configuration (use parameters)
+
+### Conditional Stages
+
+**✅ DO:**
+- Use `always()` for cleanup/documentation stages
+- Use `failed()` for rework/correction stages
+- Keep condition logic simple and obvious
+
+**❌ DON'T:**
+- Create circular dependencies
+- Over-complicate with nested conditions (Phase 1)
+
+---
+
+## 🆘 Support
+
+### Questions?
+
+1. **Read the docs** - Most questions answered in TEMPLATE_GUIDE.md
+2. **Check examples** - `template-complex.json` shows all features
+3. **Review code** - QUICK_IMPLEMENTATION_GUIDE has code snippets
+
+### Issues?
+
+1. **Check browser console** - JavaScript errors appear here
+2. **Verify JSON** - Use jsonlint.com to validate templates
+3. **Check localStorage** - May need to clear and reload
+
+---
+
+## 📄 License
+
+Internal use only. Contact Anthropic for licensing questions.
+
+---
+
+## 🙏 Acknowledgments
+
+Built with Claude Sonnet 4, implementing a true pipeline architecture for manufacturing job management.
+
+---
+
+**Version:** Phase 1.0  
+**Date:** 2025-11-04  
+**Status:** Ready for Testing

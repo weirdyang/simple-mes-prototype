@@ -291,7 +291,7 @@
                 <div class="field-desc">Template version (e.g., "1.0.0")</div>
               </div>
               <div class="field">
-                <span class="field-name">customFields</span>: <span class="field-type">FieldDefinition[]</span>
+                <span class="field-name">parameters</span>: <span class="field-type">ParameterDefinition[]</span>
                 <div class="nested">
                   <div class="nested-title">FieldDefinition:</div>
                   • fieldId: string<br>
@@ -402,8 +402,12 @@
                 <div class="field-desc">"pending" | "in-progress" | "completed" | "failed"</div>
               </div>
               <div class="field">
-                <span class="field-name">customFieldValues</span>: <span class="field-type">object</span>
-                <div class="field-desc">Key-value pairs for template custom fields</div>
+                <span class="field-name">parameterValues</span>: <span class="field-type">object</span>
+                <div class="field-desc">Immutable configuration set at job creation</div>
+              </div>
+              <div class="field">
+                <span class="field-name">variableValues</span>: <span class="field-type">object</span>
+                <div class="field-desc">Mutable runtime state updated during execution</div>
               </div>
               <div class="field">
                 <span class="field-name">stageExecutions</span>: <span class="field-type">StageExecution[]</span>
@@ -502,7 +506,7 @@
                 <span class="field-name">templateName</span>: <span class="field-type">string</span>
               </div>
               <div class="field">
-                <span class="field-name">fields</span>: <span class="field-type">QAFieldDefinition[]</span>
+                <span class="field-name">fields</span>: <span class="field-type">QAParameterDefinition[]</span>
                 <div class="nested">
                   <div class="nested-title">QAFieldDefinition:</div>
                   • fieldId: string<br>
@@ -552,7 +556,7 @@
 
         <div class="relationship">
           <div class="relationship-title">6. Variable Substitution</div>
-          Job's <span class="highlight">customFieldValues</span> replace <span class="highlight">${variableName}</span> in template fields (step names, material quantities, etc.)
+          Job's <span class="highlight">parameterValues</span> replace <span class="highlight">${variableName}</span> in template fields (step names, material quantities, etc.)
         </div>
 
       </div>
@@ -686,7 +690,7 @@
 Order No → orderNo ✓
 Client Name → jobName ✓
 Due Date → dueDate ✓
-Steel Qty → customFieldValues.plateQuantity ✓
+Steel Qty → parameterValues.plateQuantity ✓
 
 <strong>Missing Required Fields:</strong>
 ❌ rodQuantity
@@ -714,7 +718,7 @@ Set default: certificationRequired = "AWS D1.1" (for all rows)
   "templateId": "welding_job_v1",
   "templateName": "Standard Welding Job",
   "version": "1.0.0",
-  "customFields": [
+  "parameters": [
     {
       "fieldId": "plateQuantity",
       "label": "Steel Plate Quantity",
@@ -811,7 +815,7 @@ Set default: certificationRequired = "AWS D1.1" (for all rows)
   "dueDate": "2025-11-15",
   "assignedTo": "Team A",
   "status": "in-progress",
-  "customFieldValues": {
+  "parameterValues": {
     "plateQuantity": 10,
     "rodQuantity": 5,
     "certificationRequired": "AWS D1.1"
@@ -872,7 +876,7 @@ Set default: certificationRequired = "AWS D1.1" (for all rows)
             <div class="schema-title">Variable Substitution</div>
             <div class="schema-body">
               <div class="field">Template uses <span class="highlight">${variableName}</span> placeholders</div>
-              <div class="field">Job provides values in <span class="highlight">customFieldValues</span></div>
+              <div class="field">Job provides values in <span class="highlight">parameterValues</span></div>
               <div class="field">System resolves variables when instantiating job</div>
               <div class="field">Works in: step names, material quantities, descriptions</div>
             </div>

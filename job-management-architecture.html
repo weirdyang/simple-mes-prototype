@@ -182,6 +182,8 @@
               <div class="field">status: string</div>
               <div class="field">assignedTo: string</div>
               <div class="field">notes: string</div>
+              <div class="field">parameters: object</div>
+              <div class="field">variables: object</div>
               <div class="field">steps: Step[]</div>
               <div class="field">requirements: Requirement[]</div>
             </div>
@@ -197,6 +199,7 @@
               <div class="field">dependencies: stepId[]</div>
               <div class="field">qaChecklistTemplateId: string</div>
               <div class="field">qaChecklistData: object</div>
+              <div class="field">variableUpdates: object</div>
               <div class="field">materials: Material[]</div>
             </div>
           </div>
@@ -288,38 +291,38 @@
         <div class="flow">
           <div class="flow-box">
             <div class="flow-number">1</div>
-            <strong>Create QA Template</strong><br>
-            <small>Admin defines JSON schema for checklist</small>
+            <strong>Create Template</strong><br>
+            <small>Define stages, steps, parameters, variables</small>
           </div>
           
           <div class="flow-box">
             <div class="flow-number">2</div>
             <strong>Create Job</strong><br>
-            <small>Add job details, steps, materials</small>
+            <small>Set parameter values (immutable config)</small>
           </div>
           
           <div class="flow-box">
             <div class="flow-number">3</div>
-            <strong>Assign QA Template to Step</strong><br>
-            <small>Link template to specific step</small>
+            <strong>Variable Substitution</strong><br>
+            <small>Replace ${name} with actual values</small>
           </div>
           
           <div class="flow-box">
             <div class="flow-number">4</div>
             <strong>Execute Step</strong><br>
-            <small>Worker opens step, sees dynamic form</small>
+            <small>Worker opens step, sees rendered content</small>
           </div>
           
           <div class="flow-box">
             <div class="flow-number">5</div>
-            <strong>Fill QA Checklist</strong><br>
-            <small>Enter data, system validates</small>
+            <strong>Update Variables</strong><br>
+            <small>Record runtime data (mutable state)</small>
           </div>
           
           <div class="flow-box">
             <div class="flow-number">6</div>
-            <strong>Submit & Save</strong><br>
-            <small>Data stored with step, marked complete</small>
+            <strong>Complete Step</strong><br>
+            <small>Variables flow to next steps</small>
           </div>
         </div>
       </div>
@@ -333,8 +336,8 @@
           <div class="box">
             <div class="box-title">LOCALSTORAGE</div>
             <div class="box-content">
-              <div class="field"><code>jobs</code> - Array of Job objects</div>
-              <div class="field"><code>qaTemplates</code> - Array of QA Templates</div>
+              <div class="field"><code>jobs</code> - Array of Job objects with parameters/variables</div>
+              <div class="field"><code>templates</code> - Array of Templates with parameters/variables</div>
               <div class="field"><code>users</code> - Array of users/teams</div>
               <div class="field"><code>materials</code> - Material catalog</div>
             </div>
@@ -346,8 +349,8 @@
               <div class="field">saveJob(job)</div>
               <div class="field">getJob(jobId)</div>
               <div class="field">updateStep(jobId, stepId, data)</div>
-              <div class="field">saveQATemplate(template)</div>
-              <div class="field">validateQAData(templateId, data)</div>
+              <div class="field">updateVariables(jobId, variables)</div>
+              <div class="field">substituteVariables(text, params, vars)</div>
             </div>
           </div>
         </div>
@@ -373,30 +376,31 @@
             <div class="box-title">JOB DETAIL VIEW</div>
             <div class="box-content">
               <div class="field">Job info header</div>
+              <div class="field">Parameter values display</div>
+              <div class="field">Variable values display</div>
               <div class="field">Steps list (with status)</div>
               <div class="field">Dependency visualization</div>
-              <div class="field">Materials checklist</div>
             </div>
           </div>
           
           <div class="box">
             <div class="box-title">STEP EXECUTION VIEW</div>
             <div class="box-content">
-              <div class="field">Step details</div>
-              <div class="field">Dynamic QA form (rendered)</div>
-              <div class="field">Material usage tracking</div>
+              <div class="field">Step details (with substituted values)</div>
+              <div class="field">Variable update form</div>
+              <div class="field">Checklist completion</div>
               <div class="field">Status update controls</div>
             </div>
           </div>
           
           <div class="box">
-            <div class="box-title">QA TEMPLATE BUILDER</div>
+            <div class="box-title">TEMPLATE BUILDER</div>
             <div class="box-content">
-              <div class="field">Visual form designer</div>
-              <div class="field">Add/remove fields</div>
-              <div class="field">Set validation rules</div>
-              <div class="field">Preview form</div>
-              <div class="field">Export JSON</div>
+              <div class="field">Add parameters (immutable config)</div>
+              <div class="field">Add variables (mutable state)</div>
+              <div class="field">Import template JSON</div>
+              <div class="field">Preview substitution</div>
+              <div class="field">Export template</div>
             </div>
           </div>
         </div>

@@ -257,7 +257,11 @@
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
-            <span class="attribute-name">customFields</span>: <span class="attribute-type">FieldDefinition[]</span>
+            <span class="attribute-name">parameters</span>: <span class="attribute-type">ParameterDefinition[]</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">variables</span>: <span class="attribute-type">VariableDefinition[]</span>
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
@@ -272,7 +276,7 @@
           <div class="section-title">Methods</div>
           <div class="method">
             <span class="attribute-visibility">+</span>
-            <span class="method-name">instantiate</span>(customFieldValues): Job
+            <span class="method-name">instantiate</span>(parameterValues): Job
           </div>
           <div class="method">
             <span class="attribute-visibility">+</span>
@@ -381,17 +385,17 @@
         </div>
       </div>
 
-      <!-- FieldDefinition -->
+      <!-- ParameterDefinition -->
       <div class="class-box">
         <div class="class-header">
           <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
-          FieldDefinition
+          ParameterDefinition
         </div>
         <div class="class-section">
           <div class="section-title">Attributes</div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
-            <span class="attribute-name">fieldId</span>: <span class="attribute-type">string</span>
+            <span class="attribute-name">parameterId</span>: <span class="attribute-type">string</span>
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
@@ -399,26 +403,62 @@
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
-            <span class="attribute-name">type</span>: <span class="attribute-type">FieldType</span>
-          </div>
-          <div class="attribute">
-            <span class="attribute-visibility">+</span>
-            <span class="attribute-name">required</span>: <span class="attribute-type">boolean</span>
+            <span class="attribute-name">description</span>: <span class="attribute-type">string</span>
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
             <span class="attribute-name">defaultValue</span>: <span class="attribute-type">any</span>
           </div>
-          <div class="attribute">
-            <span class="attribute-visibility">+</span>
-            <span class="attribute-name">validation</span>: <span class="attribute-type">ValidationRule</span>
-          </div>
+        </div>
+      </div>
+
+      <!-- VariableDefinition -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;value object&gt;&gt;</div>
+          VariableDefinition
         </div>
         <div class="class-section">
-          <div class="section-title">Methods</div>
-          <div class="method">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
             <span class="attribute-visibility">+</span>
-            <span class="method-name">validate</span>(value): boolean
+            <span class="attribute-name">variableId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">label</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">description</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">defaultValue</span>: <span class="attribute-type">any</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA Template (kept for backward compatibility) -->
+      <div class="class-box">
+        <div class="class-header">
+          <div class="class-stereotype">&lt;&lt;entity&gt;&gt;</div>
+          QA Template
+        </div>
+        <div class="class-section">
+          <div class="section-title">Attributes</div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateId</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">templateName</span>: <span class="attribute-type">string</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">fields</span>: <span class="attribute-type">ChecklistFieldDefinition[]</span>
+          </div>
           </div>
         </div>
       </div>
@@ -767,7 +807,11 @@
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
-            <span class="attribute-name">customFieldValues</span>: <span class="attribute-type">object</span>
+            <span class="attribute-name">parameterValues</span>: <span class="attribute-type">object</span>
+          </div>
+          <div class="attribute">
+            <span class="attribute-visibility">+</span>
+            <span class="attribute-name">variableValues</span>: <span class="attribute-type">object</span>
           </div>
           <div class="attribute">
             <span class="attribute-visibility">+</span>
@@ -1148,7 +1192,10 @@
 
       <div class="relationship-item">
         <span class="rel-type">COMPOSITION</span>
-        <strong>PipelineTemplate</strong> ◆——— <strong>FieldDefinition</strong> (1 to many)
+        <strong>PipelineTemplate</strong> ◆——— <strong>ParameterDefinition</strong> (1 to many)
+      </div>
+      <div class="relationship-note">
+        <strong>PipelineTemplate</strong> ◆——— <strong>VariableDefinition</strong> (1 to many)
       </div>
 
       <div class="relationship-item">

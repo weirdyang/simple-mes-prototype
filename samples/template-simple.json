@@ -3,18 +3,22 @@
   "templateName": "Basic Product Assembly",
   "description": "Simple 3-stage assembly process for general products",
   "version": "1.0.0",
-  "customFields": [],
+  "parameters": [],
+  "variables": [],
   "stages": [
     {
       "stageId": "prep",
       "stageName": "Preparation",
       "order": 1,
+      "dependencies": [],
+      "condition": "succeeded()",
       "steps": [
         {
           "stepId": "gather_parts",
           "stepName": "Gather Parts",
           "description": "Collect all required components from inventory",
           "order": 1,
+          "dependencies": [],
           "requirements": [
             "Main housing unit",
             "Screws (x10)",
@@ -35,12 +39,15 @@
       "stageId": "assembly",
       "stageName": "Assembly",
       "order": 2,
+      "dependencies": ["prep"],
+      "condition": "succeeded()",
       "steps": [
         {
           "stepId": "assemble",
           "stepName": "Assemble Product",
           "description": "Follow assembly instructions step by step",
           "order": 1,
+          "dependencies": ["gather_parts"],
           "requirements": [
             "Screwdriver set",
             "Allen keys",
@@ -61,12 +68,15 @@
       "stageId": "qa",
       "stageName": "Quality Check",
       "order": 3,
+      "dependencies": ["assembly"],
+      "condition": "succeeded()",
       "steps": [
         {
           "stepId": "inspect",
           "stepName": "Final Inspection",
           "description": "Verify product meets quality standards",
           "order": 1,
+          "dependencies": ["assemble"],
           "requirements": [
             "Inspection checklist",
             "Measuring tools (if applicable)"
@@ -82,6 +92,6 @@
       ]
     }
   ],
-  "createdAt": "2025-11-01T00:00:00Z",
+  "createdAt": "2025-11-04T00:00:00Z",
   "createdBy": "system"
 }

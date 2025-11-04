@@ -1,48 +1,58 @@
 {
   "templateId": "complex_welding_v2",
   "templateName": "Precision Welding Job (AWS D1.1)",
-  "description": "Advanced welding process with parallel preparation, conditional rework, and full compliance tracking",
+  "description": "Advanced welding process with parameters, variables, and conditional stages",
   "version": "2.1.0",
-  "customFields": [
+  "parameters": [
     {
-      "fieldId": "plateQuantity",
+      "parameterId": "plateQuantity",
       "label": "Steel Plate Quantity",
-      "type": "number",
-      "required": true,
-      "min": 1,
-      "max": 100,
-      "unit": "sheets",
-      "defaultValue": 10
+      "defaultValue": 10,
+      "description": "Number of steel plates to weld"
     },
     {
-      "fieldId": "weldingType",
+      "parameterId": "weldingType",
       "label": "Welding Type",
-      "type": "select",
-      "options": ["MIG", "TIG", "Stick"],
-      "required": true,
-      "defaultValue": "MIG"
+      "defaultValue": "MIG",
+      "description": "Type of welding process (MIG, TIG, or Stick)"
     },
     {
-      "fieldId": "certLevel",
+      "parameterId": "certLevel",
       "label": "Required Certification Level",
-      "type": "select",
-      "options": ["AWS D1.1", "AWS D1.1 Advanced", "ASME IX"],
-      "required": true,
-      "defaultValue": "AWS D1.1"
+      "defaultValue": "AWS D1.1",
+      "description": "AWS certification level required for this job"
     },
     {
-      "fieldId": "materialGrade",
+      "parameterId": "materialGrade",
       "label": "Steel Grade",
-      "type": "select",
-      "options": ["A36", "A572", "A992"],
-      "required": true,
-      "defaultValue": "A36"
+      "defaultValue": "A36",
+      "description": "ASTM steel grade specification"
     },
     {
-      "fieldId": "clientPO",
+      "parameterId": "clientPO",
       "label": "Client Purchase Order",
-      "type": "text",
-      "required": true
+      "defaultValue": "",
+      "description": "Client's purchase order number"
+    }
+  ],
+  "variables": [
+    {
+      "variableId": "temperature",
+      "label": "Weld Temperature",
+      "defaultValue": 0,
+      "description": "Current welding temperature in Celsius"
+    },
+    {
+      "variableId": "defectCount",
+      "label": "Defect Count",
+      "defaultValue": 0,
+      "description": "Number of defects found during inspection"
+    },
+    {
+      "variableId": "passedInspection",
+      "label": "Passed QA Inspection",
+      "defaultValue": false,
+      "description": "Whether the job passed quality inspection"
     }
   ],
   "stages": [
@@ -50,7 +60,7 @@
       "stageId": "prep",
       "stageName": "Preparation",
       "order": 1,
-      "dependsOn": [],
+      "dependencies": [],
       "condition": "succeeded()",
       "steps": [
         {
@@ -58,75 +68,38 @@
           "stepName": "Material Inspection - ${plateQuantity} ${materialGrade} plates",
           "description": "Verify ${plateQuantity} steel plates (Grade ${materialGrade}) meet ASTM specifications",
           "order": 1,
-          "dependsOn": [],
-          "condition": "succeeded()",
+          "dependencies": [],
           "requirements": [
-            {
-              "requirementType": "material",
-              "name": "Steel Plate Grade ${materialGrade}",
-              "quantity": "${plateQuantity}",
-              "unit": "sheets",
-              "specification": "ASTM ${materialGrade}",
-              "required": true
-            },
-            {
-              "requirementType": "tool",
-              "toolId": "micrometer_001",
-              "toolName": "Digital Micrometer (0.001mm accuracy)",
-              "calibrationRequired": true,
-              "lastCalibrationDate": "2025-10-01",
-              "required": true
-            },
-            {
-              "requirementType": "tool",
-              "toolId": "scale_001",
-              "toolName": "Digital Scale",
-              "calibrationRequired": true,
-              "required": false
-            },
-            {
-              "requirementType": "document",
-              "name": "Material Certificate",
-              "documentType": "pdf",
-              "uploadRequired": true,
-              "required": true
-            }
+            "Steel Plate Grade ${materialGrade} (${plateQuantity} sheets)",
+            "Digital Micrometer (0.001mm accuracy)",
+            "Digital Scale",
+            "Material Certificate (PDF)"
           ],
-          "qaTemplateId": "material_inspection_v2",
-          "estimatedDuration": 30
+          "checklist": [
+            "Material dimensions verified",
+            "No surface defects found",
+            "Proper storage conditions confirmed",
+            "Material certificates reviewed"
+          ]
         },
         {
           "stepId": "equipment_setup",
           "stepName": "Setup ${weldingType} Welding Equipment",
           "description": "Prepare and calibrate ${weldingType} welder according to WPS",
           "order": 2,
-          "dependsOn": [],
-          "condition": "succeeded()",
+          "dependencies": [],
           "requirements": [
-            {
-              "requirementType": "tool",
-              "toolId": "welder_mig_300",
-              "toolName": "${weldingType} Welder 300A",
-              "calibrationRequired": true,
-              "lastCalibrationDate": "2025-09-15",
-              "required": true
-            },
-            {
-              "requirementType": "user",
-              "name": "Qualified Equipment Technician",
-              "allowedRoles": ["technician", "supervisor", "welder"],
-              "minExperienceYears": 2,
-              "required": true
-            },
-            {
-              "requirementType": "document",
-              "name": "Welding Procedure Specification (WPS)",
-              "documentType": "pdf",
-              "required": true
-            }
+            "${weldingType} Welder 300A",
+            "Welding Procedure Specification (WPS)",
+            "Calibration tools",
+            "Safety equipment"
           ],
-          "qaTemplateId": "equipment_setup_v1",
-          "estimatedDuration": 45
+          "checklist": [
+            "Equipment cleaned and inspected",
+            "Calibration verified and documented",
+            "Safety check completed",
+            "WPS parameters set correctly"
+          ]
         }
       ]
     },
@@ -134,80 +107,29 @@
       "stageId": "welding",
       "stageName": "Welding Operations",
       "order": 2,
-      "dependsOn": ["prep"],
+      "dependencies": ["prep"],
       "condition": "succeeded()",
       "steps": [
         {
           "stepId": "weld_primary",
           "stepName": "Primary ${weldingType} Welding - PO: ${clientPO}",
-          "description": "Execute welding per WPS using ${weldingType} process. Maintain temperature log.",
+          "description": "Execute welding per WPS using ${weldingType} process. Record temperature: ${temperature}°C",
           "order": 1,
-          "dependsOn": ["material_check", "equipment_setup"],
-          "condition": "succeeded()",
+          "dependencies": ["material_check", "equipment_setup"],
           "requirements": [
-            {
-              "requirementType": "qualification",
-              "certificationId": "${certLevel}",
-              "certificationName": "AWS Welding Certification ${certLevel}",
-              "expirationCheck": true,
-              "required": true
-            },
-            {
-              "requirementType": "material",
-              "name": "Welding Wire ER70S-6",
-              "quantity": 5,
-              "unit": "kg",
-              "specification": "AWS A5.18",
-              "required": true
-            },
-            {
-              "requirementType": "material",
-              "name": "Shielding Gas (75% Argon / 25% CO2)",
-              "quantity": 2,
-              "unit": "cylinders",
-              "required": true
-            },
-            {
-              "requirementType": "user",
-              "name": "Certified Welder",
-              "allowedRoles": ["welder", "senior_welder"],
-              "minExperienceYears": 3,
-              "requiredQualifications": ["${certLevel}"],
-              "required": true
-            },
-            {
-              "requirementType": "tool",
-              "toolId": "temp_logger_001",
-              "toolName": "Temperature Data Logger",
-              "calibrationRequired": true,
-              "required": true
-            }
+            "AWS Welding Certification ${certLevel}",
+            "Welding Wire ER70S-6 (5 kg)",
+            "Shielding Gas 75% Argon / 25% CO2 (2 cylinders)",
+            "Temperature Data Logger",
+            "Safety gear"
           ],
-          "qaTemplateId": "welding_process_v3",
-          "estimatedDuration": 120,
-          "outputs": [
-            {
-              "outputType": "artifact",
-              "name": "Welded Assembly",
-              "quantity": 1,
-              "passToSteps": ["qa_inspection"],
-              "storageLocation": "Bay 3, Rack A",
-              "requiredForCompletion": true
-            },
-            {
-              "outputType": "data",
-              "name": "Weld Temperature Log",
-              "dataType": "number[]",
-              "passToSteps": ["qa_inspection"],
-              "requiredForAnalytics": true
-            },
-            {
-              "outputType": "document",
-              "name": "Welding Log Sheet",
-              "documentType": "pdf",
-              "template": "welding_log_template_v2",
-              "requiredForCompletion": true
-            }
+          "checklist": [
+            "Pre-weld inspection completed",
+            "WPS parameters verified",
+            "All ${plateQuantity} plates welded",
+            "Temperature log maintained: ${temperature}°C",
+            "Visual inspection passed",
+            "Weld quality meets standards"
           ]
         }
       ]
@@ -216,116 +138,58 @@
       "stageId": "qa",
       "stageName": "Quality Assurance",
       "order": 3,
-      "dependsOn": ["welding"],
+      "dependencies": ["welding"],
       "condition": "succeeded()",
       "steps": [
         {
           "stepId": "qa_inspection",
           "stepName": "NDT Inspection & Dimensional Check",
-          "description": "Non-destructive testing and dimensional verification per acceptance criteria",
+          "description": "Non-destructive testing and dimensional verification. Found ${defectCount} defects so far.",
           "order": 1,
-          "dependsOn": ["weld_primary"],
-          "condition": "succeeded()",
+          "dependencies": ["weld_primary"],
           "requirements": [
-            {
-              "requirementType": "qualification",
-              "certificationId": "NDT_LEVEL_II",
-              "certificationName": "NDT Level II Inspector (UT/MT)",
-              "expirationCheck": true,
-              "required": true
-            },
-            {
-              "requirementType": "tool",
-              "toolId": "ut_equipment_001",
-              "toolName": "Ultrasonic Testing Equipment",
-              "calibrationRequired": true,
-              "lastCalibrationDate": "2025-10-15",
-              "required": true
-            },
-            {
-              "requirementType": "tool",
-              "toolId": "mt_equipment_001",
-              "toolName": "Magnetic Particle Testing Equipment",
-              "calibrationRequired": false,
-              "required": true
-            },
-            {
-              "requirementType": "approval",
-              "name": "QA Manager Sign-off",
-              "approverRole": "qa_manager",
-              "approvalType": "manual",
-              "required": true
-            },
-            {
-              "requirementType": "document",
-              "name": "Inspection Acceptance Criteria",
-              "documentType": "pdf",
-              "required": true
-            }
+            "NDT Level II Inspector (UT/MT)",
+            "Ultrasonic Testing Equipment",
+            "Magnetic Particle Testing Equipment",
+            "Inspection Acceptance Criteria",
+            "Measuring tools"
           ],
-          "qaTemplateId": "ndt_inspection_v2",
-          "estimatedDuration": 60,
-          "outputs": [
-            {
-              "outputType": "document",
-              "name": "NDT Inspection Report",
-              "documentType": "pdf",
-              "requiredForCompletion": true
-            },
-            {
-              "outputType": "approval",
-              "name": "QA Manager Approval",
-              "approverRole": "qa_manager",
-              "requiredForNextStage": true
-            }
+          "checklist": [
+            "UT inspection completed",
+            "MT inspection completed",
+            "Dimensional checks passed",
+            "Defect count recorded: ${defectCount}",
+            "Inspection report completed",
+            "QA Manager sign-off obtained"
           ]
         }
       ]
     },
     {
       "stageId": "rework",
-      "stageName": "Rework (Conditional)",
+      "stageName": "Rework (Conditional - If Failed)",
       "order": 4,
-      "dependsOn": ["qa"],
+      "dependencies": ["qa"],
       "condition": "failed()",
       "steps": [
         {
           "stepId": "rework_weld",
           "stepName": "Corrective Welding - Rework",
-          "description": "Address defects identified during QA inspection. Document corrective actions.",
+          "description": "Address ${defectCount} defects identified during QA inspection",
           "order": 1,
-          "dependsOn": ["qa_inspection"],
-          "condition": "failed()",
+          "dependencies": ["qa_inspection"],
           "requirements": [
-            {
-              "requirementType": "qualification",
-              "certificationId": "${certLevel}",
-              "certificationName": "AWS Welding Certification ${certLevel}",
-              "required": true
-            },
-            {
-              "requirementType": "approval",
-              "name": "Rework Authorization",
-              "approverRole": "production_manager",
-              "required": true
-            },
-            {
-              "requirementType": "document",
-              "name": "Non-Conformance Report (NCR)",
-              "documentType": "pdf",
-              "uploadRequired": true,
-              "required": true
-            }
+            "AWS Welding Certification ${certLevel}",
+            "Rework Authorization",
+            "Non-Conformance Report (NCR)",
+            "Welding equipment"
           ],
-          "qaTemplateId": "rework_log_v1",
-          "estimatedDuration": 90,
-          "outputs": [
-            {
-              "outputType": "document",
-              "name": "Rework Documentation",
-              "documentType": "pdf",
-              "requiredForCompletion": true
-            }
+          "checklist": [
+            "NCR reviewed and approved",
+            "Root cause identified",
+            "Corrective actions documented",
+            "All ${defectCount} defects addressed",
+            "Rework completed per WPS"
           ]
         },
         {
@@ -333,32 +197,25 @@
           "stepName": "Re-inspection After Rework",
           "description": "Verify rework meets acceptance criteria",
           "order": 2,
-          "dependsOn": ["rework_weld"],
-          "condition": "succeeded()",
+          "dependencies": ["rework_weld"],
           "requirements": [
-            {
-              "requirementType": "qualification",
-              "certificationId": "NDT_LEVEL_II",
-              "certificationName": "NDT Level II Inspector",
-              "required": true
-            },
-            {
-              "requirementType": "approval",
-              "name": "Final QA Approval",
-              "approverRole": "qa_manager",
-              "required": true
-            }
+            "NDT Level II Inspector",
+            "Testing equipment",
+            "Acceptance criteria"
           ],
-          "qaTemplateId": "reinspection_v1",
-          "estimatedDuration": 45
+          "checklist": [
+            "Re-inspection completed",
+            "All defects resolved",
+            "Final QA approval obtained"
+          ]
         }
       ]
     },
     {
       "stageId": "cleanup",
-      "stageName": "Cleanup & Documentation",
+      "stageName": "Cleanup & Documentation (Always Runs)",
       "order": 5,
-      "dependsOn": ["qa", "rework"],
+      "dependencies": ["qa", "rework"],
       "condition": "always()",
       "steps": [
         {
@@ -366,60 +223,43 @@
           "stepName": "Clean and Store Equipment",
           "description": "Clean work area, store equipment, dispose of waste properly",
           "order": 1,
-          "dependsOn": [],
-          "condition": "always()",
+          "dependencies": [],
           "requirements": [
-            {
-              "requirementType": "material",
-              "name": "Waste disposal containers",
-              "quantity": 1,
-              "unit": "set",
-              "required": true
-            }
+            "Waste disposal containers",
+            "Cleaning supplies",
+            "Storage area access"
           ],
           "checklist": [
             "Work area cleaned",
             "Equipment stored properly",
             "Waste disposed per regulations",
-            "Tools returned to storage"
-          ],
-          "estimatedDuration": 20
+            "Tools returned to storage",
+            "Area inspected and approved"
+          ]
         },
         {
           "stepId": "finalize_docs",
           "stepName": "Finalize Job Documentation",
-          "description": "Compile all documentation, upload to system, archive physical copies",
+          "description": "Compile all documentation for client PO ${clientPO}",
           "order": 2,
-          "dependsOn": ["cleanup_workspace"],
-          "condition": "always()",
+          "dependencies": ["cleanup_workspace"],
           "requirements": [
-            {
-              "requirementType": "document",
-              "name": "Job Traveler Packet",
-              "documentType": "pdf",
-              "required": true
-            }
+            "Job Traveler Packet",
+            "All inspection reports",
+            "Certificates and logs"
           ],
           "checklist": [
             "All required documents present",
             "Documents signed and dated",
             "Digital copies uploaded",
             "Physical copies filed",
-            "Client PO ${clientPO} referenced"
-          ],
-          "outputs": [
-            {
-              "outputType": "document",
-              "name": "Complete Job Package",
-              "documentType": "pdf",
-              "requiredForCompletion": true
-            }
-          ],
-          "estimatedDuration": 15
+            "Client PO ${clientPO} referenced in all docs",
+            "Final inspection: Passed=${passedInspection}, Defects=${defectCount}"
+          ]
         }
       ]
     }
   ],
-  "createdAt": "2025-11-01T00:00:00Z",
+  "createdAt": "2025-11-04T00:00:00Z",
   "createdBy": "system"
 }

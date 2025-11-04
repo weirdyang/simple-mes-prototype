@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Template Examples - Simple vs Complex</title>
+  <title>Job Template Examples - Simple vs Complex (Phase 1)</title>
   <style>
     * {
       margin: 0;
@@ -173,817 +173,241 @@
       width: 100%;
       border-collapse: collapse;
     }
-    
-    .comparison-table th {
-      background: #1e293b;
-      color: white;
-      padding: 15px;
-      text-align: left;
-      font-weight: 600;
-    }
-    
-    .comparison-table td {
+
+    .comparison-table th, .comparison-table td {
       padding: 15px;
       border-bottom: 1px solid #e2e8f0;
+      text-align: left;
     }
-    
-    .comparison-table tr:hover {
-      background: #f9fafb;
+
+    .comparison-table th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 14px;
     }
-    
-    .check {
-      color: #10b981;
-      font-weight: bold;
-      font-size: 18px;
+
+    .comparison-table td:nth-child(2), .comparison-table td:nth-child(3) {
+      text-align: center;
+      width: 150px;
+      font-size: 16px;
     }
-    
-    .cross {
-      color: #ef4444;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    
-    .highlight-box {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 20px 0;
-    }
-    
-    .highlight-box strong {
-      color: #92400e;
-    }
-    
-    .info-box {
-      background: #dbeafe;
-      border-left: 4px solid #3b82f6;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 20px 0;
-    }
-    
-    .info-box strong {
-      color: #1e40af;
-    }
+
+    .check { color: #10b981; font-weight: bold; }
+    .cross { color: #ef4444; font-weight: bold; }
     
     .visual-flow {
       background: white;
       border-radius: 12px;
       padding: 30px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      margin: 30px 0;
+      margin-top: 40px;
+      border: 1px solid #e2e8f0;
     }
     
-    .flow-steps {
+    .flow-diagram {
       display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
       justify-content: center;
-      margin: 20px 0;
+      align-items: flex-start;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #1e293b;
     }
-    
-    .flow-step {
-      padding: 15px 25px;
-      background: #f3f4f6;
-      border-radius: 8px;
-      border: 2px solid #d1d5db;
-      text-align: center;
-      min-width: 120px;
-    }
-    
-    .flow-step.active {
-      background: #dbeafe;
-      border-color: #3b82f6;
-      font-weight: 600;
-    }
-    
-    .flow-arrow {
-      color: #9ca3af;
-      font-size: 24px;
-    }
-    
-    @media (max-width: 1024px) {
-      .comparison-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+
+    .info-box { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    .info-box strong { color: #1e40af; }
+
+    .highlight-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    .highlight-box strong { color: #92400e; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🔧 Job Template Examples</h1>
-    <p class="subtitle">Simple vs Complex: Understanding System Flexibility</p>
-    
-    <!-- Comparison Grid -->
-    <div class="comparison-grid">
-      <!-- SIMPLE TEMPLATE -->
-      <div class="template-card">
-        <div class="card-header simple">
-          ✨ Simple Template
-        </div>
-        <div class="card-body">
-          <p><strong>Use Case:</strong> Basic assembly job for small business</p>
-          <p style="margin-top: 10px; color: #64748b;">Perfect for startups, simple processes, or non-regulated industries where you need basic job tracking without complexity.</p>
-          
-          <div class="section-title">Features Used</div>
-          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;">
-            <span class="feature-badge badge-enabled">Sequential Steps</span>
-            <span class="feature-badge badge-enabled">Basic Checklists</span>
-            <span class="feature-badge badge-enabled">Text Requirements</span>
-            <span class="feature-badge badge-disabled">No Dependencies</span>
-            <span class="feature-badge badge-disabled">No Conditions</span>
-            <span class="feature-badge badge-disabled">No Custom Fields</span>
-            <span class="feature-badge badge-disabled">No Typed Requirements</span>
-          </div>
-          
-          <div class="section-title">Template Structure</div>
-          <div class="code-block">
-<pre>{
-  <span class="property">"templateId"</span>: <span class="string">"simple_assembly_v1"</span>,
-  <span class="property">"templateName"</span>: <span class="string">"Basic Product Assembly"</span>,
-  <span class="property">"description"</span>: <span class="string">"Simple 3-stage assembly process"</span>,
-  
-  <span class="comment">// No custom fields - just core job fields</span>
-  <span class="property">"customFields"</span>: [],
-  
-  <span class="property">"stages"</span>: [
-    {
-      <span class="property">"stageId"</span>: <span class="string">"prep"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Preparation"</span>,
-      <span class="property">"order"</span>: <span class="number">1</span>,
-      <span class="comment">// No dependencies - runs first</span>
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"gather_parts"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Gather Parts"</span>,
-          <span class="property">"description"</span>: <span class="string">"Collect all required components"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          
-          <span class="comment">// Simple text-based requirements</span>
-          <span class="property">"requirements"</span>: [
-            <span class="string">"Main housing unit"</span>,
-            <span class="string">"Screws (x10)"</span>,
-            <span class="string">"Assembly instructions"</span>
-          ],
-          
-          <span class="comment">// Basic checklist</span>
-          <span class="property">"checklist"</span>: [
-            <span class="string">"All parts present"</span>,
-            <span class="string">"Parts in good condition"</span>
-          ]
-        }
-      ]
-    },
-    {
-      <span class="property">"stageId"</span>: <span class="string">"assembly"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Assembly"</span>,
-      <span class="property">"order"</span>: <span class="number">2</span>,
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"assemble"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Assemble Product"</span>,
-          <span class="property">"description"</span>: <span class="string">"Follow assembly instructions"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          
-          <span class="property">"requirements"</span>: [
-            <span class="string">"Screwdriver"</span>,
-            <span class="string">"Work surface"</span>
-          ],
-          
-          <span class="property">"checklist"</span>: [
-            <span class="string">"Housing secured"</span>,
-            <span class="string">"All screws tightened"</span>,
-            <span class="string">"No loose parts"</span>
-          ]
-        }
-      ]
-    },
-    {
-      <span class="property">"stageId"</span>: <span class="string">"qa"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Quality Check"</span>,
-      <span class="property">"order"</span>: <span class="number">3</span>,
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"inspect"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Final Inspection"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          
-          <span class="property">"checklist"</span>: [
-            <span class="string">"Product functions correctly"</span>,
-            <span class="string">"No visible defects"</span>,
-            <span class="string">"Ready for packaging"</span>
-          ]
-        }
-      ]
-    }
-  ]
-}</pre>
-          </div>
-          
-          <div class="section-title">What This Enables</div>
-          <ul class="feature-list">
-            <li>Quick setup - minimal configuration</li>
-            <li>Easy to understand for operators</li>
-            <li>Sequential execution (1 → 2 → 3)</li>
-            <li>Basic compliance tracking</li>
-            <li>Audit trail (who did what)</li>
-          </ul>
-          
-          <div class="section-title">What's NOT Included</div>
-          <ul class="feature-list disabled">
-            <li>No parallel steps</li>
-            <li>No conditional logic</li>
-            <li>No variable substitution</li>
-            <li>No complex validations</li>
-            <li>No certification requirements</li>
-          </ul>
-        </div>
-      </div>
-      
-      <!-- COMPLEX TEMPLATE -->
-      <div class="template-card">
-        <div class="card-header complex">
-          ⚡ Complex Template
-        </div>
-        <div class="card-body">
-          <p><strong>Use Case:</strong> Precision welding job for manufacturing</p>
-          <p style="margin-top: 10px; color: #64748b;">Ideal for regulated industries (aerospace, medical devices, food) requiring strict compliance, traceability, and complex workflows.</p>
-          
-          <div class="section-title">Features Used</div>
-          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;">
-            <span class="feature-badge badge-enabled">Parallel Execution</span>
-            <span class="feature-badge badge-enabled">Dependencies</span>
-            <span class="feature-badge badge-enabled">Conditions</span>
-            <span class="feature-badge badge-enabled">Custom Fields</span>
-            <span class="feature-badge badge-enabled">Typed Requirements</span>
-            <span class="feature-badge badge-enabled">Dynamic QA</span>
-            <span class="feature-badge badge-enabled">Variables</span>
-            <span class="feature-badge badge-enabled">Certifications</span>
-          </div>
-          
-          <div class="section-title">Template Structure</div>
-          <div class="code-block">
-<pre>{
-  <span class="property">"templateId"</span>: <span class="string">"complex_welding_v2"</span>,
-  <span class="property">"templateName"</span>: <span class="string">"Precision Welding Job (AWS D1.1)"</span>,
-  <span class="property">"description"</span>: <span class="string">"Advanced welding with parallel prep + conditional rework"</span>,
-  <span class="property">"version"</span>: <span class="string">"2.1.0"</span>,
-  
-  <span class="comment">// Custom fields with validation</span>
-  <span class="property">"customFields"</span>: [
-    {
-      <span class="property">"fieldId"</span>: <span class="string">"plateQuantity"</span>,
-      <span class="property">"label"</span>: <span class="string">"Steel Plate Quantity"</span>,
-      <span class="property">"type"</span>: <span class="string">"number"</span>,
-      <span class="property">"required"</span>: <span class="keyword">true</span>,
-      <span class="property">"min"</span>: <span class="number">1</span>,
-      <span class="property">"max"</span>: <span class="number">100</span>,
-      <span class="property">"unit"</span>: <span class="string">"sheets"</span>
-    },
-    {
-      <span class="property">"fieldId"</span>: <span class="string">"weldingType"</span>,
-      <span class="property">"label"</span>: <span class="string">"Welding Type"</span>,
-      <span class="property">"type"</span>: <span class="string">"select"</span>,
-      <span class="property">"options"</span>: [<span class="string">"MIG"</span>, <span class="string">"TIG"</span>, <span class="string">"Stick"</span>],
-      <span class="property">"required"</span>: <span class="keyword">true</span>
-    },
-    {
-      <span class="property">"fieldId"</span>: <span class="string">"certLevel"</span>,
-      <span class="property">"label"</span>: <span class="string">"Required Certification"</span>,
-      <span class="property">"type"</span>: <span class="string">"select"</span>,
-      <span class="property">"options"</span>: [<span class="string">"AWS D1.1"</span>, <span class="string">"AWS D1.1 Advanced"</span>, <span class="string">"ASME IX"</span>],
-      <span class="property">"required"</span>: <span class="keyword">true</span>
-    }
-  ],
-  
-  <span class="property">"stages"</span>: [
-    {
-      <span class="property">"stageId"</span>: <span class="string">"prep"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Preparation"</span>,
-      <span class="property">"order"</span>: <span class="number">1</span>,
-      <span class="property">"dependsOn"</span>: [],
-      <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"material_check"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Material Inspection - ${plateQuantity} plates"</span>,
-          <span class="property">"description"</span>: <span class="string">"Verify ${plateQuantity} steel plates meet specs"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          <span class="property">"dependsOn"</span>: [],
-          <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
-          
-          <span class="comment">// Typed requirements with validation</span>
-          <span class="property">"requirements"</span>: [
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"material"</span>,
-              <span class="property">"name"</span>: <span class="string">"Steel Plate Grade A36"</span>,
-              <span class="property">"quantity"</span>: <span class="string">"${plateQuantity}"</span>,
-              <span class="property">"unit"</span>: <span class="string">"sheets"</span>,
-              <span class="property">"specification"</span>: <span class="string">"ASTM A36"</span>,
-              <span class="property">"required"</span>: <span class="keyword">true</span>
-            },
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"tool"</span>,
-              <span class="property">"toolId"</span>: <span class="string">"micrometer_001"</span>,
-              <span class="property">"toolName"</span>: <span class="string">"Digital Micrometer"</span>,
-              <span class="property">"calibrationRequired"</span>: <span class="keyword">true</span>,
-              <span class="property">"lastCalibrationDate"</span>: <span class="string">"2025-10-01"</span>,
-              <span class="property">"required"</span>: <span class="keyword">true</span>
-            }
-          ],
-          
-          <span class="comment">// Dynamic QA template</span>
-          <span class="property">"qaTemplateId"</span>: <span class="string">"material_inspection_v2"</span>
-        },
-        {
-          <span class="property">"stepId"</span>: <span class="string">"equipment_setup"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Setup ${weldingType} Welder"</span>,
-          <span class="property">"order"</span>: <span class="number">2</span>,
-          <span class="property">"dependsOn"</span>: [],  <span class="comment">// Runs parallel with material_check</span>
-          
-          <span class="property">"requirements"</span>: [
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"tool"</span>,
-              <span class="property">"toolId"</span>: <span class="string">"welder_mig_300"</span>,
-              <span class="property">"toolName"</span>: <span class="string">"MIG Welder 300A"</span>,
-              <span class="property">"calibrationRequired"</span>: <span class="keyword">true</span>
-            },
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"user"</span>,
-              <span class="property">"name"</span>: <span class="string">"Qualified Equipment Technician"</span>,
-              <span class="property">"allowedRoles"</span>: [<span class="string">"technician"</span>, <span class="string">"supervisor"</span>],
-              <span class="property">"minExperienceYears"</span>: <span class="number">2</span>
-            }
-          ],
-          
-          <span class="property">"qaTemplateId"</span>: <span class="string">"equipment_setup_v1"</span>
-        }
-      ]
-    },
-    {
-      <span class="property">"stageId"</span>: <span class="string">"welding"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Welding Operations"</span>,
-      <span class="property">"order"</span>: <span class="number">2</span>,
-      <span class="property">"dependsOn"</span>: [<span class="string">"prep"</span>],  <span class="comment">// Waits for prep stage</span>
-      <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"weld_primary"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Primary ${weldingType} Welding"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          <span class="property">"dependsOn"</span>: [<span class="string">"material_check"</span>, <span class="string">"equipment_setup"</span>],
-          <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
-          
-          <span class="property">"requirements"</span>: [
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"qualification"</span>,
-              <span class="property">"certificationId"</span>: <span class="string">"${certLevel}"</span>,
-              <span class="property">"certificationName"</span>: <span class="string">"AWS Welding Certification"</span>,
-              <span class="property">"expirationCheck"</span>: <span class="keyword">true</span>,
-              <span class="property">"required"</span>: <span class="keyword">true</span>
-            },
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"material"</span>,
-              <span class="property">"name"</span>: <span class="string">"Welding Wire ER70S-6"</span>,
-              <span class="property">"quantity"</span>: <span class="number">5</span>,
-              <span class="property">"unit"</span>: <span class="string">"kg"</span>
-            }
-          ],
-          
-          <span class="property">"qaTemplateId"</span>: <span class="string">"welding_process_v3"</span>,
-          <span class="property">"estimatedDuration"</span>: <span class="number">120</span>,
-          
-          <span class="comment">// Outputs for next steps</span>
-          <span class="property">"outputs"</span>: [
-            {
-              <span class="property">"outputType"</span>: <span class="string">"artifact"</span>,
-              <span class="property">"name"</span>: <span class="string">"Welded Assembly"</span>,
-              <span class="property">"quantity"</span>: <span class="number">1</span>,
-              <span class="property">"passToSteps"</span>: [<span class="string">"qa_inspection"</span>]
-            },
-            {
-              <span class="property">"outputType"</span>: <span class="string">"data"</span>,
-              <span class="property">"name"</span>: <span class="string">"Weld Temperature Log"</span>,
-              <span class="property">"dataType"</span>: <span class="string">"number[]"</span>,
-              <span class="property">"requiredForAnalytics"</span>: <span class="keyword">true</span>
-            }
-          ]
-        }
-      ]
-    },
-    {
-      <span class="property">"stageId"</span>: <span class="string">"qa"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Quality Assurance"</span>,
-      <span class="property">"order"</span>: <span class="number">3</span>,
-      <span class="property">"dependsOn"</span>: [<span class="string">"welding"</span>],
-      <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"qa_inspection"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"NDT Inspection"</span>,
-          <span class="property">"order"</span>: <span class="number">1</span>,
-          <span class="property">"dependsOn"</span>: [<span class="string">"weld_primary"</span>],
-          
-          <span class="property">"requirements"</span>: [
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"qualification"</span>,
-              <span class="property">"certificationId"</span>: <span class="string">"NDT_LEVEL_II"</span>,
-              <span class="property">"certificationName"</span>: <span class="string">"NDT Level II Inspector"</span>,
-              <span class="property">"required"</span>: <span class="keyword">true</span>
-            },
-            {
-              <span class="property">"requirementType"</span>: <span class="string">"approval"</span>,
-              <span class="property">"name"</span>: <span class="string">"QA Manager Sign-off"</span>,
-              <span class="property">"approverRole"</span>: <span class="string">"qa_manager"</span>,
-              <span class="property">"required"</span>: <span class="keyword">true</span>
-            }
-          ],
-          
-          <span class="property">"qaTemplateId"</span>: <span class="string">"ndt_inspection_v2"</span>
-        }
-      ]
-    },
-    <span class="comment">// Conditional rework stage - only runs if QA fails</span>
-    {
-      <span class="property">"stageId"</span>: <span class="string">"rework"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Rework (If Failed)"</span>,
-      <span class="property">"order"</span>: <span class="number">4</span>,
-      <span class="property">"dependsOn"</span>: [<span class="string">"qa"</span>],
-      <span class="property">"condition"</span>: <span class="string">"failed()"</span>,  <span class="comment">// Only if QA failed!</span>
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"rework_weld"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Corrective Welding"</span>,
-          <span class="property">"qaTemplateId"</span>: <span class="string">"rework_log_v1"</span>
-        }
-      ]
-    },
-    <span class="comment">// Cleanup always runs</span>
-    {
-      <span class="property">"stageId"</span>: <span class="string">"cleanup"</span>,
-      <span class="property">"stageName"</span>: <span class="string">"Cleanup"</span>,
-      <span class="property">"order"</span>: <span class="number">5</span>,
-      <span class="property">"dependsOn"</span>: [<span class="string">"qa"</span>, <span class="string">"rework"</span>],
-      <span class="property">"condition"</span>: <span class="string">"always()"</span>,  <span class="comment">// Runs regardless!</span>
-      
-      <span class="property">"steps"</span>: [
-        {
-          <span class="property">"stepId"</span>: <span class="string">"cleanup_workspace"</span>,
-          <span class="property">"stepName"</span>: <span class="string">"Clean and Store Equipment"</span>
-        }
-      ]
-    }
-  ]
-}</pre>
-          </div>
-          
-          <div class="section-title">What This Enables</div>
-          <ul class="feature-list">
-            <li>Parallel execution (material check + equipment setup)</li>
-            <li>Complex dependencies (welding waits for both)</li>
-            <li>Conditional flows (rework only if failed)</li>
-            <li>Variable substitution (${plateQuantity})</li>
-            <li>Certification validation</li>
-            <li>Tool calibration tracking</li>
-            <li>Dynamic QA forms</li>
-            <li>Output tracking</li>
-            <li>Approval gates</li>
-            <li>Complete traceability</li>
-          </ul>
-        </div>
-      </div>
+    <h1>Job Template Examples - Simple vs Complex</h1>
+    <p class="subtitle">Comparing Phase 1 capabilities: Choose the right template for your process</p>
+
+    <div class="info-box">
+      <strong>✨ Phase 1 Update:</strong> The system now formally distinguishes between **Parameters** (Immutable Job Configuration) and **Variables** (Mutable Runtime State). Complex Templates use these features for advanced routing and dynamic content.
     </div>
-    
-    <!-- Feature Comparison Table -->
+
     <div class="comparison-table">
       <table>
         <thead>
           <tr>
-            <th style="width: 40%;">Feature</th>
-            <th style="width: 30%; text-align: center;">Simple Template</th>
-            <th style="width: 30%; text-align: center;">Complex Template</th>
+            <th>Feature</th>
+            <th>Simple Template</th>
+            <th>Complex Template</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Sequential Steps</strong><br><small>Steps run one after another</small></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Parallel Execution</strong><br><small>Multiple steps run simultaneously</small></td>
+            <td><strong>Parameters & Variables</strong><br><small>Immutable configuration & mutable runtime state</small></td>
             <td style="text-align: center;"><span class="cross">✗</span></td>
             <td style="text-align: center;"><span class="check">✓</span></td>
           </tr>
           <tr>
-            <td><strong>Dependencies</strong><br><small>Step X waits for Step Y</small></td>
+            <td><strong>Variable Substitution</strong><br><small>Dynamic content in names/descriptions (using ${name})</small></td>
             <td style="text-align: center;"><span class="cross">✗</span></td>
             <td style="text-align: center;"><span class="check">✓</span></td>
           </tr>
           <tr>
-            <td><strong>Conditional Execution</strong><br><small>Run step only if condition met</small></td>
+            <td><strong>Conditional Execution (Stage Routing)</strong><br><small>Run stage only if condition met (e.g., succeeded(), failed(), always())</small></td>
             <td style="text-align: center;"><span class="cross">✗</span></td>
             <td style="text-align: center;"><span class="check">✓</span></td>
           </tr>
           <tr>
-            <td><strong>Custom Fields</strong><br><small>Template-specific variables</small></td>
+            <td><strong>Dependency Management (Stage/Step)</strong><br><small>Control flow order between stages and steps</small></td>
+            <td style="text-align: center;"><span class="check">✓</span></td>
+            <td style="text-align: center;"><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><strong>Typed Requirements</strong><br><small>Specify material, tool, user, or qualification requirements</small></td>
             <td style="text-align: center;"><span class="cross">✗</span></td>
             <td style="text-align: center;"><span class="check">✓</span></td>
           </tr>
           <tr>
-            <td><strong>Variable Substitution</strong><br><small>${fieldName} replaced with value</small></td>
+            <td><strong>Material Tracking</strong><br><small>Track material consumption during step execution</small></td>
             <td style="text-align: center;"><span class="cross">✗</span></td>
             <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Simple Requirements</strong><br><small>Text-based list</small></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td><strong>Typed Requirements</strong><br><small>Material/Tool/Qualification/User</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Basic Checklist</strong><br><small>Simple checkbox list</small></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td><strong>Dynamic QA Templates</strong><br><small>Custom form with validation</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Certification Validation</strong><br><small>Check user has required certs</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Tool Calibration</strong><br><small>Verify tools are calibrated</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Output Tracking</strong><br><small>Track what step produces</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Approval Gates</strong><br><small>Require manager approval</small></td>
-            <td style="text-align: center;"><span class="cross">✗</span></td>
-            <td style="text-align: center;"><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td><strong>Setup Complexity</strong></td>
-            <td style="text-align: center;">5 minutes</td>
-            <td style="text-align: center;">30 minutes</td>
-          </tr>
-          <tr>
-            <td><strong>Best For</strong></td>
-            <td>Startups, simple processes</td>
-            <td>Manufacturing, regulated industries</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <div class="comparison-grid">
+      <div class="template-card">
+        <div class="card-header simple">
+          ✨ Simple Template Example
+        </div>
+        <div class="card-body">
+          <p>Ideal for basic, sequential processes or getting started quickly. It uses the simplest version of dependencies and no runtime data handling.</p>
+          
+          <div class="section-title">Template Structure</div>
+          <p style="margin-bottom: 10px;">The template structure is minimal. It explicitly defines empty arrays for the advanced features to keep processing simple.</p>
+          <div class="code-block">
+            <pre>{
+  <span class="property">"templateId"</span>: <span class="string">"simple_assembly_v1"</span>,
+  <span class="property">"templateName"</span>: <span class="string">"Basic Product Assembly"</span>,
+  <span class="property">"parameters"</span>: <span class="keyword">[]</span>, <span class="comment">// No job-specific configuration</span>
+  <span class="property">"variables"</span>: <span class="keyword">[]</span>, <span class="comment">// No runtime data collection</span>
+  <span class="property">"stages"</span>: [
+    {
+      <span class="property">"stageId"</span>: <span class="string">"prep"</span>,
+      <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>, <span class="comment">// Default/Sequential flow</span>
+      <span class="property">"steps"</span>: [...]
+    },
+    ...
+  ]
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="card-header complex">
+          🔮 Complex Template Example
+        </div>
+        <div class="card-body">
+          <p>Designed for compliance, traceability, and branching logic. It fully leverages Parameters, Variables, and advanced stage conditions.</p>
+          
+          <div class="section-title">Template Structure</div>
+          <p style="margin-bottom: 10px;">This template defines initial configuration (<strong style="color: #8b5cf6;">parameters</strong>) and runtime data fields (<strong style="color: #8b5cf6;">variables</strong>) at the top level.</p>
+          <div class="code-block">
+            <pre>{
+  <span class="property">"templateId"</span>: <span class="string">"complex_welding_v2"</span>,
+  <span class="property">"templateName"</span>: <span class="string">"Precision Welding Job"</span>,
+  <span class="property">"parameters"</span>: [
+    {<span class="property">"parameterId"</span>: <span class="string">"plateQuantity"</span>, ...},
+    {<span class="property">"parameterId"</span>: <span class="string">"clientPO"</span>, ...}
+  ],
+  <span class="property">"variables"</span>: [
+    {<span class="property">"variableId"</span>: <span class="string">"defectCount"</span>, ...},
+    {<span class="property">"variableId"</span>: <span class="string">"passedInspection"</span>, ...}
+  ],
+  <span class="property">"stages"</span>: [
+    {
+      <span class="property">"stageId"</span>: <span class="string">"qa"</span>, <span class="property">"condition"</span>: <span class="string">"succeeded()"</span>,
+      <span class="property">"steps"</span>: [{<span class="property">"stepName"</span>: <span class="string">"Inspect ${plateQuantity} Plates"</span>, ...}] <span class="comment">// Substitution</span>
+    },
+    {
+      <span class="property">"stageId"</span>: <span class="string">"rework"</span>, <span class="property">"condition"</span>: <span class="string">"failed()"</span>, <span class="comment">// Conditional Routing</span>
+      <span class="property">"steps"</span>: [...]
+    },
+    {
+      <span class="property">"stageId"</span>: <span class="string">"cleanup"</span>, <span class="property">"condition"</span>: <span class="string">"always()"</span>, <span class="comment">// Guaranteed execution</span>
+      <span class="property">"steps"</span>: [{<span class="property">"description"</span>: <span class="string">"Finalize docs for PO ${clientPO}"</span>, ...}]
+    }
+  ]
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
     
-    <!-- Visual Flow Comparison -->
     <div class="visual-flow">
-      <h2 style="text-align: center; margin-bottom: 30px; color: #1e293b;">Execution Flow Comparison</h2>
+      <h2 style="text-align: center; color: #1e293b; margin-bottom: 20px;">Conditional Flow (Complex Template)</h2>
+      <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Stages are dynamically enabled based on the outcome of previous stages and runtime **Variables**.</p>
       
-      <div style="margin-bottom: 40px;">
-        <h3 style="color: #10b981; margin-bottom: 15px;">✨ Simple Template Flow</h3>
-        <pre style="font-size: 16px; line-height: 1.8; text-align: center; background: #f0fdf4; padding: 25px; border-radius: 8px; border: 2px solid #10b981;">
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│ Gather Parts │  →   │   Assemble   │  →   │    Inspect   │  →   │     Done     │
-└──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
-</pre>
-        <p style="text-align: center; color: #64748b; margin-top: 15px; font-size: 16px;">
-          <strong>Linear progression</strong> - one step at a time
-        </p>
-      </div>
-      
-      <div>
-        <h3 style="color: #8b5cf6; margin-bottom: 15px;">⚡ Complex Template Flow</h3>
-        <pre style="font-size: 14px; line-height: 1.6; background: #faf5ff; padding: 25px; border-radius: 8px; border: 2px solid #8b5cf6;">
-                                              ┌──────────────────┐
-                        ┌─────────────────────│  QA Inspection   │◄─────┐
-                        │                     └────────┬─────────┘      │
-                        │                              │                │
-┌──────────────────┐    │                              │ Check Result   │
-│ Material Check   │────┤                              │                │
-└──────────────────┘    │                     ┌────────▼─────────┐      │
-                        │                     │                  │      │
-                        ▼                Pass │                  │ Fail │
-                 ┌─────────────┐             │                  │      │
-                 │   Welding   │─────────────┘                  │      │
-                 └─────────────┘                                 │      │
-                        ▲                                        │      │
-                        │                                        │      │
-┌──────────────────┐    │                                        │      │
-│ Equipment Setup  │────┘                          ┌─────────┐   │      │
-└──────────────────┘                               │ Rework  │◄──┘      │
-                                                   └────┬────┘          │
-                                                        │                │
-                                                   ┌────▼──────┐        │
-                                                   │Re-inspect │        │
-                                                   └────┬──────┘        │
-                                                        │                │
-                                                 ┌──────▼──────┐        │
-                                                 │  Pass/Fail? │────────┘
-                                                 └──────┬──────┘
-                                                        │ Pass
-                                                        │
-                                                 ┌──────▼────────────┐
-                                                 │  Cleanup (ALWAYS) │
-                                                 └──────┬────────────┘
-                                                        │
-                                                 ┌──────▼──────┐
-                                                 │    Done     │
-                                                 └─────────────┘
-</pre>
-        <p style="text-align: center; color: #64748b; margin-top: 15px; font-size: 16px;">
-          <strong>Key Features:</strong> Material Check & Equipment Setup run in <strong>parallel</strong><br>
-          QA Pass → Cleanup → Done | QA Fail → Rework → Re-inspect<br>
-          Re-inspect can <strong>Pass</strong> (exit loop) or <strong>Fail</strong> (back to Rework - loop continues)<br>
-          Cleanup <strong>always runs</strong> before Done
-        </p>
-      </div>
-    </div>
-    
-    <!-- Key Differences -->
-    <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 30px 0;">
-      <h2 style="text-align: center; margin-bottom: 30px; color: #1e293b;">🔑 Key Differences Explained</h2>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <div class="highlight-box">
-          <strong>1. Parallel vs Sequential</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> Steps run one at a time (1 → 2 → 3)<br>
-            <strong>Complex:</strong> Material check and equipment setup run simultaneously, saving time
-          </p>
-        </div>
-        
-        <div class="highlight-box">
-          <strong>2. Text vs Typed Requirements</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> "10kg steel plate" (just text)<br>
-            <strong>Complex:</strong> Material object with quantity validation, specifications, and tracking
-          </p>
-        </div>
-        
-        <div class="highlight-box">
-          <strong>3. Fixed vs Variable</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> Same text every time<br>
-            <strong>Complex:</strong> "${plateQuantity}" replaced with actual value (e.g., "10 plates")
-          </p>
-        </div>
-        
-        <div class="highlight-box">
-          <strong>4. Basic vs Dynamic QA</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> Checkbox list (all or nothing)<br>
-            <strong>Complex:</strong> Custom form with temperature readings, measurements, photo uploads
-          </p>
-        </div>
-        
-        <div class="highlight-box">
-          <strong>5. Linear vs Conditional</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> Always follows same path<br>
-            <strong>Complex:</strong> Rework step only runs if QA fails, cleanup always runs
-          </p>
-        </div>
-        
-        <div class="highlight-box">
-          <strong>6. Trust vs Validate</strong>
-          <p style="margin-top: 10px; color: #78350f;">
-            <strong>Simple:</strong> Trust operator has tools/skills<br>
-            <strong>Complex:</strong> System validates certifications, tool calibration before allowing start
-          </p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- When to Use Which -->
-    <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 30px 0;">
-      <h2 style="text-align: center; margin-bottom: 30px; color: #1e293b;">🎯 When to Use Which Template</h2>
-      
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-        <div>
-          <h3 style="color: #10b981; margin-bottom: 15px;">Use Simple Template When:</h3>
-          <ul style="list-style: none; padding: 0;">
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Starting out / proof of concept</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Non-regulated industry</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Simple, linear processes</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Small team (5-20 people)</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Jobs rarely vary</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Basic compliance needs</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Speed over complexity</li>
-          </ul>
-          <div class="info-box" style="margin-top: 20px;">
-            <strong>Examples:</strong><br>
-            • Product assembly<br>
-            • Basic packaging<br>
-            • Simple installations<br>
-            • General services
+      <div class="flow-diagram">
+        <div style="text-align: center;">
+          <div style="background: #10b981; color: white; padding: 10px; border-radius: 8px; font-weight: bold; width: 150px; margin: 0 auto;">START</div>
+          <div style="font-size: 24px;">│</div>
+          <div style="font-size: 24px;">▼</div>
+          <div style="background: #e0f2fe; border: 2px solid #0284c7; padding: 10px; border-radius: 8px; width: 150px; margin: 0 auto;">Preparation</div>
+          <div style="font-size: 24px;">│</div>
+          <div style="font-size: 24px;">▼</div>
+          <div style="background: #e0f2fe; border: 2px solid #0284c7; padding: 10px; border-radius: 8px; width: 150px; margin: 0 auto;">Primary Assembly</div>
+          <div style="font-size: 24px;">│</div>
+          <div style="font-size: 24px;">▼</div>
+          
+          <div style="background: #fffbe7; border: 2px solid #f59e0b; padding: 10px; border-radius: 8px; width: 250px; margin: 0 auto; position: relative;">
+            QA Inspection <br>
+            <span style="font-size: 10px; color: #92400e;">(Collects Variables: defectCount, passedInspection)</span>
           </div>
-        </div>
-        
-        <div>
-          <h3 style="color: #8b5cf6; margin-bottom: 15px;">Use Complex Template When:</h3>
-          <ul style="list-style: none; padding: 0;">
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Regulated industry (FDA, ISO, OSHA)</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Certifications required</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Complex workflows with branches</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Large team (50+ people)</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Jobs highly variable</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Strict audit requirements</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">✓ Time savings from parallelization</li>
-          </ul>
-          <div class="info-box" style="margin-top: 20px;">
-            <strong>Examples:</strong><br>
-            • Aerospace manufacturing<br>
-            • Medical device production<br>
-            • Food processing (HACCP)<br>
-            • Pharmaceutical manufacturing
+          
+          <div style="display: flex; justify-content: space-around; width: 300px; margin: 10px auto;">
+            <div style="font-size: 24px; color: #10b981;">✓ Pass (succeeded())</div>
+            <div style="font-size: 24px; color: #ef4444;">✗ Fail (failed())</div>
+          </div>
+          
+          <div style="display: flex; justify-content: space-around; width: 500px; margin: 0 auto;">
+            <div style="flex: 1; text-align: center;">
+              <div style="font-size: 24px; margin-left: 50px;">│</div>
+              <div style="font-size: 24px; margin-left: 50px;">▼</div>
+              <div style="background: #fee2e2; border: 2px solid #ef4444; padding: 10px; border-radius: 8px; width: 150px; margin: 0 auto;">Rework Stage<br><span style="font-size: 10px; color: #991b1b;">(Condition: failed())</span></div>
+              <div style="font-size: 24px; margin-left: 50px;">│</div>
+              <div style="font-size: 24px; margin-left: 50px;">▼</div>
+              <div style="background: #99f6e4; border: 2px solid #047876; padding: 5px; border-radius: 4px; width: 100px; margin: 0 auto 10px auto; font-size: 11px;">Re-Inspect</div>
+              <div style="font-size: 24px;">&nbsp;</div>
+            </div>
+
+            <div style="flex: 1; text-align: center; position: relative;">
+              <div style="position: absolute; top: -50px; left: 0; right: 0; margin: auto; height: 100px; width: 2px; background: #64748b;"></div>
+              <div style="background: #e2e8f0; border: 2px solid #94a3b8; padding: 10px; border-radius: 8px; width: 250px; margin: 10px auto; position: relative; z-index: 1;">
+                Cleanup & Documentation<br>
+                <span style="font-size: 10px; color: #4b5563;">(Condition: always())</span>
+              </div>
+              <div style="font-size: 24px;">│</div>
+              <div style="font-size: 24px;">▼</div>
+              <div style="background: #10b981; color: white; padding: 10px; border-radius: 8px; font-weight: bold; width: 150px; margin: 0 auto;">DONE</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Migration Path -->
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 40px; color: white; margin: 30px 0;">
-      <h2 style="text-align: center; margin-bottom: 30px;">🚀 Migration Path: Simple → Complex</h2>
-      <p style="text-align: center; font-size: 18px; margin-bottom: 30px; opacity: 0.9;">
-        Start simple, grow as needed. The system supports both simultaneously!
-      </p>
-      
-      <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
-        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; min-width: 150px; text-align: center;">
-          <div style="font-size: 24px; margin-bottom: 10px;">Phase 1</div>
-          <div>Simple Templates</div>
-          <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">Get started fast</div>
-        </div>
-        
-        <div style="font-size: 30px;">→</div>
-        
-        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; min-width: 150px; text-align: center;">
-          <div style="font-size: 24px; margin-bottom: 10px;">Phase 2</div>
-          <div>Add Custom Fields</div>
-          <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">Job variations</div>
-        </div>
-        
-        <div style="font-size: 30px;">→</div>
-        
-        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; min-width: 150px; text-align: center;">
-          <div style="font-size: 24px; margin-bottom: 10px;">Phase 3</div>
-          <div>Add Dependencies</div>
-          <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">Parallel work</div>
-        </div>
-        
-        <div style="font-size: 30px;">→</div>
-        
-        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; min-width: 150px; text-align: center;">
-          <div style="font-size: 24px; margin-bottom: 10px;">Phase 4</div>
-          <div>Full Complex</div>
-          <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">All features</div>
-        </div>
-      </div>
-      
-      <p style="text-align: center; margin-top: 30px; font-size: 14px; opacity: 0.9;">
-        💡 Pro Tip: You can have both simple and complex templates in the same system!<br>
-        Use simple for routine jobs, complex for critical processes.
-      </p>
-    </div>
-    
-    <!-- Summary -->
-    <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+
+    <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; margin-top: 40px;">
       <h2 style="color: #1e293b; margin-bottom: 20px;">📊 Bottom Line</h2>
       <div style="max-width: 800px; margin: 0 auto; text-align: left; line-height: 1.8;">
         <p style="margin-bottom: 15px;">
-          <strong style="color: #10b981;">Simple Template:</strong> Perfect for getting started. Covers 80% of use cases with 20% of the complexity. Ideal for small businesses, simple processes, and teams new to digital job management.
+          <strong style="color: #10b981;">Simple Template:</strong> Perfect for getting started. Covers 80% of use cases with 20% of the complexity. **It is now explicitly empty of Parameters and Variables.**
         </p>
         <p style="margin-bottom: 15px;">
-          <strong style="color: #8b5cf6;">Complex Template:</strong> Built for scale and compliance. Required for regulated industries, certification tracking, and complex workflows. Provides complete traceability and automation.
-        </p>
-        <p style="margin-bottom: 15px;">
-          <strong>The beauty:</strong> You don't have to choose! Use simple templates for routine jobs and complex templates for critical processes. The system supports both simultaneously through feature toggles.
+          <strong style="color: #8b5cf6;">Complex Template:</strong> Built for scale and compliance. Required for regulated industries, certification tracking, and complex workflows. **It fully utilizes Parameters for configuration and Variables for runtime flow control.**
         </p>
         <p style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
-          <strong>💡 Recommendation:</strong> Start with simple templates to get your team comfortable, then gradually add complexity where needed. This reduces training time and ensures adoption.
+          <strong>💡 Recommendation:</strong> Use simple templates for routine jobs and complex templates for critical processes. The system supports both simultaneously.
         </p>
       </div>
     </div>
